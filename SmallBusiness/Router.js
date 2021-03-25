@@ -4,6 +4,7 @@ import HomeScreen from './student_views/HomeScreen';
 import CreateStudent from './student_views/CreateStudent';
 import CreateRestaurant from './restaurant_views/CreateRestaurant';
 import RestaurantUser from './restaurant_views/RestaurantUser';
+import Map from './student_views/Map';
 import {
     StyleSheet,
     View,
@@ -20,6 +21,7 @@ function LoginView({ navigation }) {
 }
 
 function HomeView() {
+    // TODO: change back to <HomeScreen /> after map is done
     return (
         <HomeScreen />
     )
