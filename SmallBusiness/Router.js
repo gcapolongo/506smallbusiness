@@ -1,17 +1,21 @@
 import React from 'react';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './student_views/HomeScreen';
+import AppStack from './student_views/AppStack';
 import CreateStudent from './student_views/CreateStudent';
 import CreateRestaurant from './restaurant_views/CreateRestaurant';
 import RestaurantUser from './restaurant_views/RestaurantUser';
-import Map from './student_views/Map';
+import CustomerUser from './restaurant_views/CustomerUser';
+import UpdateProfile from './student_views/UpdateProfile';
+import EditProfile from './restaurant_views/EditProfile';
+
+
 import {
     StyleSheet,
     View,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 const Stack = createStackNavigator();
 
 function LoginView({ navigation }) {
@@ -20,16 +24,33 @@ function LoginView({ navigation }) {
     )
 }
 
-function HomeView() {
-    // TODO: change back to <HomeScreen /> after map is done
+function HomeView({navigation}) {
     return (
-        <HomeScreen />
+        <AppStack nav = {navigation}/>
     )
 }
 
-function RestaurantUserView() {
+function RestaurantUserView({navigation}) {
     return (
-        <RestaurantUser />
+        <RestaurantUser nav ={navigation} />
+    )
+}
+
+function updateRestaurant(){
+    return(
+        <EditProfile />
+    )
+}
+
+function updateCustomer({navigation}){
+    return(
+        <UpdateProfile nav = {navigation}/>
+    )
+}
+
+function CustomerUserView() {
+    return (
+        <CustomerUser />
     )
 }
 
@@ -68,12 +89,24 @@ export default class Router extends React.Component {
                         component={CreateStudentView}
                     />
                     <Stack.Screen 
+                        name="Update Customer"
+                        component={updateCustomer}
+                    />
+                    <Stack.Screen 
                         name="Create Restaurant"
                         component={CreateRestaurantView}
                     />
                     <Stack.Screen 
                         name="Restaurant User"
                         component={RestaurantUserView}
+                    />
+                    <Stack.Screen 
+                        name="Update Restaurant"
+                        component={updateRestaurant}
+                    />
+                    <Stack.Screen 
+                        name="Customer User"
+                        component={CustomerUserView}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
