@@ -24,12 +24,19 @@ export default class RestaurantUser extends React.Component {
         console.log("added new deal")
     }
 
+
+    //handles profile edit
+    handleEdit =() =>{
+        //TODO
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Restaurant Profile</Text>
                 <View style={styles.inputContainer}>
-                <TouchableOpacity style={[styles.btnStyle, { width:150, height:50}]}>
+                <TouchableOpacity style={[styles.btnStyle, { width:150, height:50}]}
+                onPress={this.handleEdit()}>
                     <Text style={styles.btnText}>Edit Profile</Text>
                 </TouchableOpacity>
                 <Text style={styles.inputHeaders}>Name: {this.state.name}</Text>
