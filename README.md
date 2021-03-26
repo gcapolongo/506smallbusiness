@@ -2,6 +2,7 @@ Install these dependencies if the app doesn't work
 
 - npm install --save firebase 
 - npm install --save firebase-admin
+- npm install react-native-elements
 
 How to log in as customer:
 
