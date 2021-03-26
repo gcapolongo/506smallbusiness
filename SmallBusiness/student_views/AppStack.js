@@ -53,7 +53,7 @@ export default class AppStack extends React.Component {
                         animationEnabled: true,
                     }}>
 
-                    {(props) => <HomeScreen />}
+                    {(props) => <HomeScreen {...props} nav={this.props.nav} />}
                 </AppTabs.Screen>
 
                 <AppTabs.Screen
@@ -67,7 +67,7 @@ export default class AppStack extends React.Component {
                         animationEnabled: true,
                     }}>
 
-                    {(props) => <ProfileView />}
+                    {(props) => <ProfileView {...props} nav={this.props.nav} />}
                 </AppTabs.Screen>
 
             </AppTabs.Navigator>

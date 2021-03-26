@@ -337,4 +337,4 @@ const styles = StyleSheet.create({
   // }
 });
 
-export default ProfileView;
+export default UpdateProfile;

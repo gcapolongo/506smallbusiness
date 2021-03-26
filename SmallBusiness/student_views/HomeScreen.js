@@ -9,6 +9,9 @@ import {
     ScrollView
 } from 'react-native';
 
+import RestaurantCard from './RestaurantCard'
+import business from './smallBusinesses.json'
+
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 
@@ -16,6 +19,10 @@ export default class HomeScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        let data = JSON.parse(JSON.stringify(business));
+        this.state = {
+            businesses: data
+        };
     }
 
     render() {
@@ -28,7 +35,18 @@ export default class HomeScreen extends React.Component {
                     Restaurants
                 </Text>
                 <ScrollView>
-                    <Card>
+                    <View style={styles.container}>
+                        {this.state.businesses.SmallBusinesses.Businesses.map((item, index) => (
+                            <RestaurantCard
+                                key={index}
+                                name={item.Name}
+                                address={item.Address}
+                                image={item.photo}
+                                nav = {this.props.nav}
+                            />
+                        ))}
+                    </View>
+                    {/* <Card>
                         <Card.Title style={styles.cardTitle}>Badger Bytes</Card.Title>
                         <Card.Divider />
                         <Image
@@ -44,9 +62,9 @@ export default class HomeScreen extends React.Component {
                                 <Text style={styles.btnText}>Favorite</Text>
                             </TouchableOpacity>
                         </View>
-                    </Card>
+                    </Card> */}
 
-                    <Card>
+                    {/* <Card>
                         <Card.Title style={styles.cardTitle}>Little Eats</Card.Title>
                         <Card.Divider />
                         <Image
@@ -98,7 +116,7 @@ export default class HomeScreen extends React.Component {
                                 <Text style={styles.btnText}>Favorite</Text>
                             </TouchableOpacity>
                         </View>
-                    </Card>
+                    </Card> */}
 
                 </ScrollView>
             </View>
