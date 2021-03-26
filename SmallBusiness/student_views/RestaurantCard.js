@@ -9,7 +9,7 @@ import {
     ScrollView
 } from 'react-native';
 
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Card } from 'react-native-elements'
 import business from './smallBusinesses.json'
 
 
@@ -21,7 +21,7 @@ export default class RestaurantCard extends React.Component {
     }
 
     registerRestaurant() {
-        this.props.nav.navigate("Restaurant User");
+        this.props.nav.navigate("Customer User");
     }
 
     render() {

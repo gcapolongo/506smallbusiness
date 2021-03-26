@@ -12,8 +12,6 @@ import {
 import RestaurantCard from './RestaurantCard'
 import business from './smallBusinesses.json'
 
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
-
 
 export default class HomeScreen extends React.Component {
 

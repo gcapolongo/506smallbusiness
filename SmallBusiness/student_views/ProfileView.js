@@ -17,11 +17,17 @@ export default class ProfileView extends React.Component {
     constructor(props) {
         super(props);
         this.registerRestaurant = this.registerRestaurant.bind(this);
+        this.updateUser = this.updateUser.bind(this)
     }
 
     registerRestaurant() {
-        this.props.nav.navigate("Restaurant User");
+        this.props.nav.navigate("Customer User");
     }
+
+    updateUser() {
+        this.props.nav.navigate("Update Customer");
+    }
+    
 
     render() {
         return (
@@ -32,7 +38,7 @@ export default class ProfileView extends React.Component {
                 <Text style={styles.subtitle}>
                     John Doe (jdoe)
                 </Text>
-                <TouchableOpacity style={[styles.btnStyle, {marginLeft: 30}]}>
+                <TouchableOpacity style={[styles.btnStyle, {marginLeft: 30}]} onPress={this.updateUser}>
                     <Text style={styles.btnText}>Edit Profile</Text>
                 </TouchableOpacity>
                 <Text style = {styles.subHeading}>
@@ -40,7 +46,7 @@ export default class ProfileView extends React.Component {
                 </Text>
                 <ScrollView>
                     <Card>
-                        <Card.Title style={styles.cardTitle}>Little Eats</Card.Title>
+                        <Card.Title style={styles.cardTitle}>Mirch Masala</Card.Title>
                         <Card.Divider />
                         <Image
                             resizeMode="cover"
@@ -58,7 +64,7 @@ export default class ProfileView extends React.Component {
                     </Card>
 
                     <Card>
-                        <Card.Title style={styles.cardTitle}>Eatmor</Card.Title>
+                        <Card.Title style={styles.cardTitle}>La Hacienda</Card.Title>
                         <Card.Divider />
                         <Image
                             resizeMode="cover"
@@ -76,7 +82,7 @@ export default class ProfileView extends React.Component {
                     </Card>
 
                     <Card>
-                        <Card.Title style={styles.cardTitle}>Snack time</Card.Title>
+                        <Card.Title style={styles.cardTitle}>Buraka</Card.Title>
                         <Card.Divider />
                         <Image
                             resizeMode="cover"
