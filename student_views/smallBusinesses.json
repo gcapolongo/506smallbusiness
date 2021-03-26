@@ -1,0 +1,46 @@
+﻿{
+    "SmallBusinesses": {
+      "Businesses": [
+        {
+          "Name": "Mirch Masala",
+          "Address": "449 State St, Madison, WI 53703",
+          "photo": "https://www.mirchmasalaus.com/img/slider/9.jpg"
+        },
+        {
+          "Name": "Chen's Dumplings",
+          "Address": "505 State St, Madison, WI 53703",
+          "photo": "https://img1.wsimg.com/isteam/stock/57814"
+        },
+        {
+          "Name": "Strings Ramen",
+          "Address": "311 N Frances St, Madison, WI 53703",
+          "photo": "https://duyt4h9nfnj50.cloudfront.net/resized/1525365093175-w2880-57.jpg"
+        },
+        {
+          "Name": "Estacion Inka",
+          "Address": "616 University Ave, Madison, WI 53715",
+          "photo": "https://d1ralsognjng37.cloudfront.net/7e40b909-978a-4ffa-8d81-90480e32584d.jpeg"
+        },
+        {
+          "Name": "Monty's Blue Plate Diner",
+          "Address": "2089 Atwood Ave, Madison, WI 53704",
+          "photo": "https://montysblueplatediner.com/wp-content/uploads/main/004_Huevos_rancheros_3604.jpg"
+        },
+        {
+          "Name": "Asian Kitchen",
+          "Address": "449 State St Unit E, Madison, WI 53703",
+          "photo": "https://raster-static.postmates.com/?url=com.postmates.img.prod.s3.amazonaws.com/97bfa486-927f-4679-9add-d311b6ee8a29/orig.jpg&quality=90&w=1500&h=900&mode=crop&format=jpg&v=4"
+        },
+        {
+          "Name": "La Hacienda",
+          "Address": "515 S Park St, Madison, WI 53715",
+          "photo": "https://media-cdn.tripadvisor.com/media/photo-s/07/b3/66/3d/caption.jpg"
+        },
+        {
+          "Name": "Buraka",
+          "Address": "1210 Williamson St, Madison, WI 53703",
+          "photo": "https://isthmus.com/downloads/38333/download/Food-Buraka-crEricTadsen-04212016.jpg?cb=75c00a977e929002775ab89f3e40bdc8"
+        }
+      ]
+    }
+  }
