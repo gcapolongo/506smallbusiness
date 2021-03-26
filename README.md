@@ -3,6 +3,8 @@ Install these dependencies if the app doesn't work
 - npm install --save firebase 
 - npm install --save firebase-admin
 - npm install react-native-elements
+- npm install react-native-maps
+- npm install react-native-maps-directions
 
 How to log in as customer:
 
