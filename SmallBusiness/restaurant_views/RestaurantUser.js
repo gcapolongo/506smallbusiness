@@ -13,8 +13,8 @@ export default class RestaurantUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "Place",
-            location: "Holders",
+            name: "-",
+            location: "-",
             rating: "-"
         }
     }
