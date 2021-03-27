@@ -40,11 +40,10 @@ export default class RestaurantUser extends React.Component {
             <ScrollView>
                 <View style={styles.container}>
                     <Text style={[styles.title, { fontSize: 32, marginLeft: 0 }]}>Small Business Deals</Text>
-                    <Text style={styles.title}>Restaurant Profile</Text>
+                    <Text style={styles.title}>Mirch Masala</Text>
                     <View style={styles.inputContainer}>
-
-                        <Text style={styles.inputHeaders}>Name: Mirch Masala</Text>
-                        <Text style={styles.inputHeaders}>Location: 449 State St, Madison, WI 53703</Text>
+                        <Text style={styles.inputHeaders}>Address: 449 State St, Madison, WI 53703</Text>
+                        <Text style={styles.inputHeaders}>Business Hours: 10 am - 10 pm </Text>
                         <Text style={styles.inputHeaders}>Rating: 3.5</Text>
                         <TouchableOpacity style={[styles.btnStyle, { width: 150, height: 50 }]}
                             onPress={this.handleEdit}>

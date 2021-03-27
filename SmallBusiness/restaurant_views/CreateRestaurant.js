@@ -35,7 +35,13 @@ export default class CreateRestaurant extends React.Component {
                     <Text style={styles.inputHeaders}>Address:</Text>
                     <TextInput 
                         style={styles.input}    
-                        placeholder="Password"
+                        placeholder="Address"
+                        autoCapitalize="none"
+                    />
+                    <Text style={styles.inputHeaders}>Username:</Text>
+                    <TextInput
+                        style={styles.input} 
+                        placeholder="Username"
                         autoCapitalize="none"
                     />
                     <Text style={styles.inputHeaders}>Password:</Text>
