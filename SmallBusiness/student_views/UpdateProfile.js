@@ -200,7 +200,7 @@ class UpdateProfile extends React.Component {
               onChangeText={(password) => this.setState({ password: password })}
               value={this.state.password}
               autoCapitalize="none" />
-            <Text style={styles.inputHeaders}>Email Address</Text>
+            {/* <Text style={styles.inputHeaders}>Email Address</Text>
 
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
@@ -208,7 +208,7 @@ class UpdateProfile extends React.Component {
               placeholderTextColor="#EE8B90"
               onChangeText={(email) => this.setState({ email: email })}
               value={this.state.email}
-              autoCapitalize="none" />
+              autoCapitalize="none" /> */}
             <Text style={styles.inputHeaders}>Contact Number</Text>
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"

@@ -35,9 +35,11 @@ export default class ProfileView extends React.Component {
                 <Text style={styles.title}>
                     Small Business Deals
                 </Text>
-                <Text style={styles.subtitle}>
+                <Text style = {styles.subHeading}>
                     John Doe (jdoe)
                 </Text>
+                <Text style={[styles.subtitle, {fontSize: 15, marginTop: 10, fontWeight: "100"}]}>Address: 123 W Johnson St, Madison, WI 53703</Text>
+                <Text style={[styles.subtitle, {fontSize: 15, marginTop: 10, fontWeight: "100"}]}>Contact: 123-456-7890</Text>
                 <TouchableOpacity style={[styles.btnStyle, {marginLeft: 30}]} onPress={this.updateUser}>
                     <Text style={styles.btnText}>Edit Profile</Text>
                 </TouchableOpacity>
