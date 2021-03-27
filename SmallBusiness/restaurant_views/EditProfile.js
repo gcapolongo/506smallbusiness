@@ -183,8 +183,7 @@ class UpdateProfile extends React.Component {
           <Text style={styles.title}>Small Business Deals</Text>
           <Text style={styles.subtitle}>Profile</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputHeaders}>Email Address</Text>
-
+            <Text style={styles.inputHeaders}>Name</Text>
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Email"
@@ -192,15 +191,6 @@ class UpdateProfile extends React.Component {
               onChangeText={(email) => this.setState({ email: email })}
               value={this.state.email}
               autoCapitalize="none" />
-            <Text style={styles.inputHeaders}>Username</Text>
-            <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Username"
-              placeholderTextColor="#EE8B90"
-              onChangeText={(username) => this.setState({ username: username })}
-              value={this.state.username}
-              autoCapitalize="none" />
-
             <Text style={styles.inputHeaders}>Password</Text>
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
@@ -209,13 +199,13 @@ class UpdateProfile extends React.Component {
               onChangeText={(password) => this.setState({ password: password })}
               value={this.state.password}
               autoCapitalize="none" />
-            <Text style={styles.inputHeaders}>Contact Number</Text>
+            <Text style={styles.inputHeaders}>Business Hours</Text>
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
-              placeholder="Number"
+              placeholder="Username"
               placeholderTextColor="#EE8B90"
-              onChangeText={(number) => this.setState({ number: number })}
-              value={this.state.number + ""}
+              onChangeText={(username) => this.setState({ username: username })}
+              value={this.state.username}
               autoCapitalize="none" />
             <Text style={styles.inputHeaders}>Address</Text>
             <TextInput style={styles.input}
@@ -224,6 +214,14 @@ class UpdateProfile extends React.Component {
               placeholderTextColor="#EE8B90"
               onChangeText={(address) => this.setState({ address: address })}
               value={this.state.address + ""}
+              autoCapitalize="none" />
+            <Text style={styles.inputHeaders}>Password</Text>
+            <TextInput style={styles.input}
+              underlineColorAndroid="transparent"
+              placeholder="Password"
+              placeholderTextColor="#EE8B90"
+              onChangeText={(password) => this.setState({ password: password })}
+              value={this.state.password}
               autoCapitalize="none" />
             <View style={styles.btnContainer}>
               <TouchableOpacity style={styles.btnStyle} onPress={() => this.saveProfile()}>
