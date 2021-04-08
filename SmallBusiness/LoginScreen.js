@@ -32,6 +32,7 @@ export default class LoginScreen extends React.Component {
    * Works for both customers and restaurant users
    */
   handleLogin() {
+    
     this.authenticate();
   }
 
@@ -90,8 +91,18 @@ export default class LoginScreen extends React.Component {
         .then(function (snapshot) {
           if (snapshot.exists()) {
             data = snapshot.val();  
+            
             userValues = Object.values(data);
-            role = userValues[2];
+
+            //prints an array of the customer's info
+            console.log(userValues)
+
+            for(let i = 0; i < userValues.length; i++){
+                if(userValues[i] = "Student"){
+                  role = userValues[i];
+                }
+            }
+            //role = userValues[3];
             console.log("Role of the current user logging in: " + role);
           }
         })
@@ -109,7 +120,13 @@ export default class LoginScreen extends React.Component {
             data = snapshot.val();
       
             userValues = Object.values(data);
-            role = userValues[4];
+            console.log(userValues)
+            for(let i = 0; i < userValues.length; i++){
+              if(userValues[i] = "Restaurant"){
+                role = userValues[i];
+              }
+          }
+            //role = userValues[4];
             console.log("Role of the current user logging in: " + role);
           }
         })
