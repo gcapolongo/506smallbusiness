@@ -89,6 +89,12 @@ class UpdateProfile extends React.Component {
     database.ref("Users")
     .child("Restaurants")
     .child(user.uid).update({ Password: newPassword })
+
+    //update the password in firebase authentication
+    user.updatePassword(password).then(function() {
+    }).catch(function(error) {
+    // error
+    });
   }
 
   /**
