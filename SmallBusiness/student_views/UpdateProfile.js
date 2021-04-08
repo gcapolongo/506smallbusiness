@@ -62,36 +62,23 @@ class UpdateProfile extends React.Component {
    * and as well in the database.
    */
   updateEmail() {
-
     var user = auth.currentUser;
     let email = this.state.email;
-    let key = 0;
-
-    //update charly's info in the database
-    if (user.email === "charly206@gmail.com") {
-      key = 0;
-
-      //update tom's info in the database
-    } else if (user.email === "tom608@gmail.com") {
-      key = 1;
-    }
-
-    //update the email field in database
-    database.ref("users/" + key).update({ Email: email })
+    
+    database.ref("Users")
+    .child("Customers")
+    .child(user.uid).update({ Email: email })
 
     //update email in firebase authentication
-    user.updateEmail(this.state.email).then(function () {
+    user.updateEmail(this.state.email).then(function() { 
 
       this.setState({
         email: user.email
       })
-
-    }).catch(function (error) {
+      
+    }).catch(function(error) {
       //error
     });
-    console.log(user.email)
-
-
   }
 
   /**
@@ -100,48 +87,25 @@ class UpdateProfile extends React.Component {
   updateUsername() {
     var username = this.state.username;
     var user = auth.currentUser;
-    let key = 0;
-
-    //update charly's info in the database
-    if (user.email === "charly206@gmail.com") {
-      key = 0;
-
-      //update tom's info in the database
-    } else if (user.email === "tom608@gmail.com") {
-      key = 1;
-    }
-
-    database.ref("users/" + key).update({ Username: username })
-
+    //TODO: get name to display on profile page
   }
 
   /**
    * Updates the password in Firebase Authentication and in the specified user's 
-   * password field in the database. Not sure if it works with updateEmail() at the
-   * same time
+   * password field in the database. 
    */
   updatePassword() {
     var user = auth.currentUser;
-    var newPassword = this.state.password;
-    let key = 0;
+    var password = this.state.password;
 
-    //update charly's info in the database
-    if (user.email === "charly206@gmail.com") {
-      key = 0;
+    database.ref("Users")
+    .child("Customers")
+    .child(user.uid).update({ Password: password })
 
-      //update tom's info in the database
-    } else if (user.email === "tom608@gmail.com") {
-      key = 1;
-    }
-
-    //update the password field in database
-    database.ref("users/" + key).update({ Password: newPassword })
-
-    user.updatePassword(newPassword).then(function () {
-
-
-    }).catch(function (error) {
-      // error
+    //update the password in firebase authentication
+    user.updatePassword(password).then(function() {
+    }).catch(function(error) {
+    // error
     });
   }
 
@@ -150,22 +114,8 @@ class UpdateProfile extends React.Component {
    */
   updateAddress() {
     var address = this.state.address;
-
     var user = auth.currentUser;
-    let key = 0;
-
-    //update charly's info in the database
-    if (user.email === "charly206@gmail.com") {
-      key = 0;
-
-      //update tom's info in the database
-    } else if (user.email === "tom608@gmail.com") {
-      key = 1;
-    }
-
-    //update the Addresses field in database
-    database.ref("users/" + key).update({ Addresses: address })
-
+    //TODO: display this on the user's profile page
   }
 
   backToLogin() {
@@ -191,6 +141,14 @@ class UpdateProfile extends React.Component {
               onChangeText={(username) => this.setState({ username: username })}
               value={this.state.username}
               autoCapitalize="none" />
+            <Text style={styles.inputHeaders}>Email Address</Text>
+            <TextInput style={styles.input}
+              underlineColorAndroid="transparent"
+              placeholder="Email"
+              placeholderTextColor="#EE8B90"
+              onChangeText={(email) => this.setState({ email: email })}
+              value={this.state.email}
+              autoCapitalize="none" /> 
 
             <Text style={styles.inputHeaders}>Password</Text>
             <TextInput style={styles.input}
@@ -200,23 +158,7 @@ class UpdateProfile extends React.Component {
               onChangeText={(password) => this.setState({ password: password })}
               value={this.state.password}
               autoCapitalize="none" />
-            {/* <Text style={styles.inputHeaders}>Email Address</Text>
-
-            <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Email"
-              placeholderTextColor="#EE8B90"
-              onChangeText={(email) => this.setState({ email: email })}
-              value={this.state.email}
-              autoCapitalize="none" /> */}
-            <Text style={styles.inputHeaders}>Contact Number</Text>
-            <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Number"
-              placeholderTextColor="#EE8B90"
-              onChangeText={(number) => this.setState({ number: number })}
-              value={this.state.number + ""}
-              autoCapitalize="none" />
+            
             <Text style={styles.inputHeaders}>Address</Text>
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
