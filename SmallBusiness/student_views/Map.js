@@ -9,7 +9,8 @@ import {
     ScrollView,
     StyleSheet,
     View,
-    Dimensions
+    Dimensions,
+    Alert
 } from 'react-native';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAme_A3WZ1uHIq9SAZFg93AyNzTW84KNVU';
@@ -28,10 +29,29 @@ const arrival = {
     longitude: -89.400131,
 }
 
+const coordinates = [
+    {
+        latitude: 43.072670,
+        longitude: -89.395530,
+    },
+    {
+        latitude: 43.074680,
+        longitude: -89.393930,
+    },
+    {
+        latitude: 43.061540,
+        longitude: -89.400420
+    }
+]
+
 export default class Map extends React.Component {
 
     constructor(props) {
         super(props);
+    }
+
+    onPress = () => {
+        Alert.alert("Information", "You just clicked a map marker!");
     }
 
     render() {
@@ -41,6 +61,8 @@ export default class Map extends React.Component {
             initialRegion = {origin}
             showsUserLocation = {true}
             >
+                {coordinates.map((item, index) => 
+                    <MapView.Marker key={index} onPress={this.onPress} coordinate={item} />)}
                 <MapViewDirections 
                     origin={departure}
                     destination={arrival}
