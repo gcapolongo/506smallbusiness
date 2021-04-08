@@ -6,14 +6,4 @@ Install these dependencies before running the app
 - npm install react-native-maps
 - npm install react-native-maps-directions
 
-How to log in as customer:
-
-Email: customer@gmail.com
-Password: 123123
-
-How to log in as restaurant:
-
-Email: fiveguys@gmail.com
-Password: 123123
-
-Or you can register a different email and password and log in with that. Everyone should have been invited to the firebase database as of now so you can actually see the accounts that are registered with the app- This functionality is not yet implemented completely.
+You can register an email and password and use those credentials to log in. The credentials are written to the firebase database also.
