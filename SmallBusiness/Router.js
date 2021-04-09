@@ -8,6 +8,7 @@ import RestaurantUser from './restaurant_views/RestaurantUser';
 import CustomerUser from './restaurant_views/CustomerUser';
 import UpdateProfile from './student_views/UpdateProfile';
 import EditProfile from './restaurant_views/EditProfile';
+import AddDeal from './restaurant_views/AddDeal';
 
 
 import {
@@ -39,6 +40,12 @@ function RestaurantUserView({navigation}) {
 function updateRestaurant(){
     return(
         <EditProfile />
+    )
+}
+
+function addDeal(){
+    return(
+        <AddDeal />
     )
 }
 
@@ -103,6 +110,10 @@ export default class Router extends React.Component {
                     <Stack.Screen 
                         name="Update Restaurant"
                         component={updateRestaurant}
+                    />
+                    <Stack.Screen 
+                        name="Add Deal"
+                        component={addDeal}
                     />
                     <Stack.Screen 
                         name="Customer User"

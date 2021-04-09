@@ -10,23 +10,36 @@ import {
 
 import { Card } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
+import sample_deals from '../sample_deals.json'
 
 export default class RestaurantUser extends React.Component {
 
     constructor(props) {
         super(props);
+
+        //TODO: remove this when firebase is connected
+        let data = JSON.parse(JSON.stringify(sample_deals))
         this.state = {
+            uid: "",
             name: "-",
             location: "-",
-            rating: "-"
+            rating: "-",
+            deals: data,
         }
 
         this.handleEdit = this.handleEdit.bind(this);
     }
 
+    async componentDidMount(){
+        //TODO: fetch data from firebase here
+        //let uid = route.params.uid
+        //console.log("UID : " + uid)
+    }
+
     // event handler for add deal button
-    addDeal() {
+    addDeal = () => {
         console.log("added new deal")
+        this.props.nav.navigate("Add Deal")
     }
 
 
@@ -34,6 +47,8 @@ export default class RestaurantUser extends React.Component {
     handleEdit = () => {
         this.props.nav.navigate("Update Restaurant");
     }
+
+    
 
     render() {
         return (
@@ -51,37 +66,26 @@ export default class RestaurantUser extends React.Component {
                         </TouchableOpacity>
 
                         <Text style={styles.title}>Deals </Text>
+                        
+                            {this.state.deals.Deals.map((deal, index) =>(
+                                <Card>
+                                    <Card.Title style={[styles.cardTitle, {flexDirection: "row"}]}>
+                                        <Text style={{}}>{deal.title}</Text>
+                                        <TouchableOpacity style={[styles.btnStyle, { width: 100, height: 30 }] }>
+                                            <Text style={[styles.btnText,{ fontSize: 12}]}>Delete</Text>
+                                        </TouchableOpacity>
+                                    </Card.Title>
+                                    <Card.Divider />
+                                    <Image
+                                        resizeMode="cover"
+                                        source={{ uri: this.props.image }}
+                                    />
+                                    <Text style={styles.cardText}>{deal.description}</Text>
+                                    
+                                </Card>
+                            ))}
                         <ScrollView>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>25% off entire order</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: 25% of any order over 10$</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>Any 2 items for 7$ each</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: Get any two items from select menu options for 7$ each</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>Free side</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: Get a free side over any order of 25$ or more</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
+
                         </ScrollView>
                         <TouchableOpacity style={[styles.btnStyle, { width: 150, height: 50 }]}
                             onPress={this.addDeal}>
@@ -130,6 +134,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 20,
         height: 70,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    btnStyle: {
+        backgroundColor: "black",
+        width: 125,
+        borderRadius: 5,
+        marginTop: 10,
+        height: 35,
         alignItems: "center",
         justifyContent: "center",
     },

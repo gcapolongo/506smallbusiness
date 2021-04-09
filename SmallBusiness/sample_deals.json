@@ -1,0 +1,16 @@
+{
+    "Deals":[
+    {
+        "title": "25% off entire order",
+        "description":"25% of any order over 10$"
+    },
+     {
+        "title": "Any 2 items for 7$ each",
+        "description":"Get any two items from select menu options for 7$ each"
+    },
+    {
+        "title": "Free side",
+        "description":"Get a free side over any order of 25$ or more"
+    }
+    ]
+}
