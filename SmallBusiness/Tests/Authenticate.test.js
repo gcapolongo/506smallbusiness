@@ -1,2 +1,0 @@
-const { CreateStudent } = require('./LoginScreen');
-
