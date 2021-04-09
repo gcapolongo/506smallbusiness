@@ -12,6 +12,9 @@ import { Card } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 import sample_deals from '../sample_deals.json'
 
+import { auth } from "../Fire";
+import { database } from "../Fire"
+
 export default class RestaurantUser extends React.Component {
 
     constructor(props) {
@@ -24,17 +27,20 @@ export default class RestaurantUser extends React.Component {
             name: "-",
             location: "-",
             rating: "-",
+            businesshours: "-",
             deals: data,
         }
 
         this.handleEdit = this.handleEdit.bind(this);
     }
 
-    async componentDidMount(){
+     async componentDidMount(){
         //TODO: fetch data from firebase here
         //let uid = route.params.uid
         //console.log("UID : " + uid)
-    }
+        this.getInfo();
+        
+     } 
 
     // event handler for add deal button
     addDeal = () => {
@@ -46,6 +52,54 @@ export default class RestaurantUser extends React.Component {
     //handles profile edit
     handleEdit = () => {
         this.props.nav.navigate("Update Restaurant");
+    }
+
+    /**
+     * Gets the restaurant's name and address
+     */
+     getInfo = async() => {
+        var user = auth.currentUser;
+        let data = "";
+        let location = "";
+        let name = "";
+        let userValues = "";
+
+        if (user) {
+            // User is signed in.
+            console.log("Current signed in user's UID: " + user.uid);
+              
+            await database
+              .ref("Users")
+              .child("Restaurants")
+              .child(user.uid)
+              .get()
+              .then(function (snapshot) {
+                if (snapshot.exists()) {
+                  data = snapshot.val();
+            
+                  userValues = Object.values(data);
+
+                  //prints restaurant data
+                  console.log(userValues)
+
+                  location = userValues[0];
+                  name = userValues[2];
+                
+                }
+              })
+              .catch(function (error) {
+                console.error(error);
+              });
+              //updates state variables 
+              this.setState({location: location})
+              this.setState({name: location})
+              console.log("Restaurant address: " + this.state.location)
+              console.log("Restaurant name: " + this.state.name)
+
+          } else {
+            // No user is signed in.
+            alert("Not signed in");
+          }
     }
 
     
