@@ -23,6 +23,7 @@ export default class CreateStudent extends React.Component {
       cfpassword: "",
       uid: "",
       role: "",
+      favorites: "",
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -80,6 +81,7 @@ export default class CreateStudent extends React.Component {
     var newData = {
       Address: this.state.address,
       Email: this.state.email,
+      Favorites: [""],
       Username: this.state.username,
       Password: this.state.password,
       Role: "Student",
