@@ -17,6 +17,7 @@ export default class CreateStudent extends React.Component {
     super(props);
     this.state = {
       email: "",
+      address: "",
       username: "",
       password: "",
       cfpassword: "",
@@ -77,7 +78,7 @@ export default class CreateStudent extends React.Component {
 
     //This is how the data will be stored in the database
     var newData = {
-      //id: this.state.key,
+      Address: this.state.address,
       Email: this.state.email,
       Username: this.state.username,
       Password: this.state.password,
@@ -107,7 +108,14 @@ export default class CreateStudent extends React.Component {
             onChangeText={(email) => this.setState({ email: email })}
             value={this.state.email}
           />
-
+          <Text style={styles.inputHeaders}>Address:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Address"
+            autoCapitalize="none"
+            onChangeText={(address) => this.setState({ address: address })}
+            value={this.state.address}
+          />
           <Text style={styles.inputHeaders}>Password:</Text>
           <TextInput
             style={styles.input}
