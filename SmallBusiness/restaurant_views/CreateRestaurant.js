@@ -84,6 +84,7 @@ export default class CreateRestaurant extends React.Component {
       Address: this.state.address,
       Email: this.state.email,
       Password: this.state.password,
+      Hours: "",
       Role: "Restaurant",
     };
     //actually sets the data in the database
