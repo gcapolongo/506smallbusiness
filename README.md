@@ -6,9 +6,14 @@ Install these dependencies before running the app
 - npm install react-native-maps
 - npm install react-native-maps-directions
 
-For testing, you can use
-email: c@gmail.com (for the customer)
-email: r@gmail.com (for the restaurant)
-password: 123123 (for both accounts)
+How to log in as customer
+Email: customer@gmail.com --
+Password: 123123
 
-You can register an email and password and use those credentials to log in. The credentials are written to the firebase database also.
+Or you can create an account by pressing the "Create Account" button and providing the proper credentials. These will be saved to the firebase database
+
+How to log in as restaurant
+Email: mirchmasala@gmail.com --
+Password: masala
+
+Or you can register a different email and password and use those credentials to log in. The credentials are written to the firebase database also.
