@@ -92,7 +92,7 @@ export default class RestaurantUser extends React.Component {
               });
               //updates state variables 
               this.setState({location: location})
-              this.setState({name: location})
+              this.setState({name: name})
               console.log("Restaurant address: " + this.state.location)
               console.log("Restaurant name: " + this.state.name)
 
