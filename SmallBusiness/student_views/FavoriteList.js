@@ -11,82 +11,40 @@ import {
 
 import { Card } from 'react-native-elements'
 import business from './smallBusinesses.json'
-import { auth } from "../Fire.js";
-import { database } from "../Fire";
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 
-export default class RestaurantCard extends React.Component {
+export default class FavoriteList extends React.Component {
 
     constructor(props) {
         super(props);
+        let data = JSON.parse(JSON.stringify(business));
         this.state = {
-            Favorites: [],
-            favLabel: "Favorite"
-        }
-
+            businesses: data
+        };
         this.registerRestaurant = this.registerRestaurant.bind(this);
-        this.getUserFavorties = this.getUserFavorites.bind(this)
-        this.addFavorite = this.addFavorite.bind(this)
-        this.updateLabel = this.updateLabel.bind(this)
-
     }
 
-    componentDidMount() {
-        this.updateLabel()
-        // console.log("IN MOUNTING")
-        // console.log(this.state.Favorites)
-        // console.log(this.props.name)
-    }
 
-    async updateLabel() {
-        await this.getUserFavorites()
-        if (this.state.Favorites.includes(this.props.name)) {
-            this.setState({ favLabel: "In favorites" })
-        }
-    }
+    // removeFavorite(){
+    //     let newFiltered = 
 
-    async getUserFavorites() {
+    //     this.props.filtered.map((item) =>
+    //     {
+    //         if(item.name == this.props.name){
 
-        // console.log("HERE IN CARD")
+                
+    //         }
+    //     }
+    //     )
 
-        // let user = auth.currentUser
-        // console.log("CUREENT USERR")
-        // console.log(user)
-        let restaurants = []
-        let value;
-        await database
-            .ref("Users")
-            .child("Customers")
-            .child(this.props.user)
-            .get()
-            .then(function (snapshot) {
-                if (snapshot.exists()) {
-                    value = snapshot.val()
-                }
-            }
-            )
 
-        this.setState({ Favorites: value.Favorites })
-    }
+    // }
+
+
 
     registerRestaurant() {
         this.props.nav.navigate("Customer User");
     }
-
-    addFavorite() {
-        this.updateLabel()
-        let favList = this.state.Favorites
-        if (favList.includes(this.props.name) == false) {
-            favList.push(this.props.name)
-            database.ref("Users")
-                .child("Customers")
-                .child(this.props.user).update({ Favorites: favList })
-
-            console.log("Favorited")
-        }
-    }
-
     render() {
         return (
             <View style={styles.container}>
@@ -95,16 +53,15 @@ export default class RestaurantCard extends React.Component {
                     <Card.Divider />
                     <Image
                         resizeMode="cover"
-                        source={{ uri: this.props.image }}
+                        source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
                     />
-                    <Text style={styles.cardText}>Address: {this.props.address}</Text>
-                    <Text style={styles.cardText}>Rating: </Text>
+                    <Text style={styles.cardText}>Rating</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity style={styles.btnStyle} onPress={this.registerRestaurant}>
                             <Text style={styles.btnText}>View Deals</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]} onPress={this.addFavorite}>
-                            <Text style={styles.btnText}>{this.state.favLabel}</Text>
+                        <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]}>
+                            <Text style={styles.btnText}>Remove</Text>
                         </TouchableOpacity>
                     </View>
                 </Card>

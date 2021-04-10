@@ -12,15 +12,53 @@ import {
 import RestaurantCard from './RestaurantCard'
 import business from './smallBusinesses.json'
 
+import { auth } from "../Fire.js";
+import { database } from "../Fire";
+
 
 export default class HomeScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        let data = JSON.parse(JSON.stringify(business));
+        // let data = JSON.parse(JSON.stringify(business));
         this.state = {
-            businesses: data
+            businesses: []
         };
+
+        this.getRestaurantData = this.getRestaurantData.bind(this)
+    }
+
+    componentDidMount(){
+        this.getRestaurantData()
+    }
+
+    async getRestaurantData(){
+        
+        let restaurants = []
+        let userValues;
+       await database
+       .ref("Users")
+       .child("Restaurants")
+       .get()
+       .then(function (snapshot) {
+         if (snapshot.exists()) {
+           const value = snapshot.val()
+           userValues = Object.values(value)
+            console.log("VALUE HOMESCREEN")
+            console.log(value)
+            }
+        }
+        )
+
+        userValues.map((item) => (
+               restaurants.push(item)
+        ))
+
+        console.log("RESTAURANTS ARRAY")
+        console.log(restaurants)
+
+        this.setState({businesses: restaurants})
+        
     }
 
     render() {
@@ -33,89 +71,22 @@ export default class HomeScreen extends React.Component {
                     Restaurants
                 </Text>
                 <ScrollView>
+                    {console.log("STATE ARRAy")}
+                    {console.log(this.state.businesses)}
                     <View style={styles.container}>
-                        {this.state.businesses.SmallBusinesses.Businesses.map((item, index) => (
+                        {console.log(this.state.businesses)}
+                        {this.state.businesses.map((item, index) => (
+
                             <RestaurantCard
                                 key={index}
                                 name={item.Name}
                                 address={item.Address}
                                 image={item.photo}
                                 nav = {this.props.nav}
+                                user ={this.props.user}
                             />
                         ))}
                     </View>
-                    {/* <Card>
-                        <Card.Title style={styles.cardTitle}>Badger Bytes</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>Favorite</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card> */}
-
-                    {/* <Card>
-                        <Card.Title style={styles.cardTitle}>Little Eats</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>Favorite</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card>
-
-                    <Card>
-                        <Card.Title style={styles.cardTitle}>Eatmor</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>Favorite</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card>
-
-                    <Card>
-                        <Card.Title style={styles.cardTitle}>Snack time</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>Favorite</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card> */}
-
                 </ScrollView>
             </View>
         )

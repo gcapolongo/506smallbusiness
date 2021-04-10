@@ -10,16 +10,88 @@ import {
 } from 'react-native';
 
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import business from './smallBusinesses.json'
+import userList from './users.json'
 
+import FavoriteList from './FavoriteList'
+import { auth } from "../Fire.js";
+import { database } from "../Fire";
 
 export default class ProfileView extends React.Component {
 
     constructor(props) {
         super(props);
+        let data = JSON.parse(JSON.stringify(business));
+
+        // let userInfo = JSON.parse(JSON.stringify(userList));
+        this.state = {
+            businesses: data,
+            userFavorites: [],
+            filteredFavorites: []
+        };
+
         this.registerRestaurant = this.registerRestaurant.bind(this);
         this.updateUser = this.updateUser.bind(this)
+        this.getFavorites = this.getFavorites.bind(this)
+        this.getRestaurants = this.getRestaurants.bind(this)
+        this.filterFavorites = this.filterFavorites.bind(this)
     }
 
+    componentDidMount(){
+        this.filterFavorites()
+    }
+
+    async getFavorites() {
+
+        console.log("GETTING FAVS")
+
+        let value;
+        await database
+            .ref("Users")
+            .child("Customers")
+            .child(this.props.user)
+            .get()
+            .then(function (snapshot) {
+                if (snapshot.exists()) {
+                    value = snapshot.val()
+                }
+            }
+            )
+        
+        console.log(value.Favorites)
+        this.setState({ userFavorites: value.Favorites })
+    }
+
+    async getRestaurants(){
+
+        console.log("GETTING RESTAU")
+
+        let restaurants = []
+        let userValues;
+       await database
+       .ref("Users")
+       .child("Restaurants")
+       .get()
+       .then(function (snapshot) {
+         if (snapshot.exists()) {
+           const value = snapshot.val()
+           userValues = Object.values(value)
+            // console.log("VALUE HOMESCREEN")
+            // console.log(value)
+            }
+        }
+        )
+
+        userValues.map((item) => (
+               restaurants.push(item)
+        ))
+
+        this.setState({businesses: restaurants})
+
+    }
+
+
+    
     registerRestaurant() {
         this.props.nav.navigate("Customer User");
     }
@@ -27,82 +99,62 @@ export default class ProfileView extends React.Component {
     updateUser() {
         this.props.nav.navigate("Update Customer");
     }
-    
+
+    async filterFavorites() {
+        await this.getRestaurants()
+        await this.getFavorites()
+        let favorites = []
+
+        this.state.businesses.map((item) =>
+            {
+                // console.log("ITEEM in profile")
+                // console.log(item)
+                if(this.state.userFavorites.includes(item.Name)){
+                    favorites.push(item)
+                }
+            }
+            )
+
+
+        this.setState({filteredFavorites: favorites})
+    }
+
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Small Business Deals
+            <ScrollView>
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Small Business Deals
                 </Text>
-                <Text style = {styles.subHeading}>
-                    John Doe (jdoe)
+                    <Text style={styles.subHeading}>
+                        John Doe (jdoe)
                 </Text>
-                <Text style={[styles.subtitle, {fontSize: 15, marginTop: 10, fontWeight: "100"}]}>Address: 123 W Johnson St, Madison, WI 53703</Text>
-                <Text style={[styles.subtitle, {fontSize: 15, marginTop: 10, fontWeight: "100"}]}>Contact: 123-456-7890</Text>
-                <TouchableOpacity style={[styles.btnStyle, {marginLeft: 30}]} onPress={this.updateUser}>
-                    <Text style={styles.btnText}>Edit Profile</Text>
-                </TouchableOpacity>
-                <Text style = {styles.subHeading}>
-                    Favorites
+                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Address: 123 W Johnson St, Madison, WI 53703</Text>
+                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Contact: 123-456-7890</Text>
+                    <TouchableOpacity style={[styles.btnStyle, { marginLeft: 30 }]} onPress={this.updateUser}>
+                        <Text style={styles.btnText}>Edit Profile</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.subHeading}>
+                        Favorites
                 </Text>
-                <ScrollView>
-                    <Card>
-                        <Card.Title style={styles.cardTitle}>Mirch Masala</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle} onPress={this.registerRestaurant}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.btnStyle, {marginLeft: 20}]}>
-                                <Text style={styles.btnText}>Remove</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card>
+                    <View style={styles.container}>
+                        {/* {console.log("FILTERED FAVORITES")}
+                        {console.log(this.state.filteredFavorites)} */}
+                        {this.state.filteredFavorites.map((item, index) => (
+                            <FavoriteList
+                                key={index}
+                                name={item.Name}
+                                address={item.Address}
+                                image={item.photo}
+                                nav={this.props.nav}
+                                filtered  = {this.state.filteredFavorites}
+                            />
+                        ))}
+                    </View>
+                </View >
 
-                    <Card>
-                        <Card.Title style={styles.cardTitle}>La Hacienda</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.btnStyle, {marginLeft: 20}]}>
-                                <Text style={styles.btnText}>Remove</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card>
-
-                    <Card>
-                        <Card.Title style={styles.cardTitle}>Buraka</Card.Title>
-                        <Card.Divider />
-                        <Image
-                            resizeMode="cover"
-                            source={{ uri: 'https://www.google.com/search?q=restaurant+front&sxsrf=ALeKk02554udpLQMcw-Kh0CVt3Qea-enug:1616564571642&tbm=isch&source=iu&ictx=1&fir=lYPtJOtXLsq8OM%252C2ppjzqbkIHU-xM%252C_&vet=1&usg=AI4_-kRMbjQFF1TbeMuD55zdKfdx8ZoHGA&sa=X&ved=2ahUKEwiW87GonMjvAhWBB80KHdZcDsMQ9QF6BAgDEAE&biw=1422&bih=678#imgrc=lYPtJOtXLsq8OM' }}
-                        />
-                        <Text style={styles.cardText}>Rating</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={styles.btnStyle}>
-                                <Text style={styles.btnText}>View Deals</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.btnStyle, {marginLeft: 20}]}>
-                                <Text style={styles.btnText}>Remove</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card>
-                    
-                </ScrollView>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -126,7 +178,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
 
-    subHeading:{
+    subHeading: {
         fontSize: 25,
         fontWeight: "bold",
         textAlign: "center",
