@@ -51,7 +51,7 @@ export default class LoginScreen extends React.Component {
         //checks role of customer
         this.state.role = await this.checkCustomerRole();
 
-        console.log("Role of user: " + this.state.role);
+        // console.log("Role of user: " + this.state.role);
 
         if (this.state.role === "Student") {
           //if role is user go to homescreen
@@ -81,7 +81,7 @@ export default class LoginScreen extends React.Component {
 
     if (user) {
       // User is signed in.
-      console.log("Current signed in user's UID: " + user.uid);
+      // console.log("Current signed in user's UID: " + user.uid);
 
       await database
         .ref("Users")
@@ -95,7 +95,7 @@ export default class LoginScreen extends React.Component {
             userValues = Object.values(data);
 
             //prints an array of the customer's info
-            console.log(userValues)
+            // console.log(userValues)
 
             for(let i = 0; i < userValues.length; i++){
                 if(userValues[i] = "Student"){
@@ -103,11 +103,11 @@ export default class LoginScreen extends React.Component {
                 }
             }
             //role = userValues[3];
-            console.log("Role of the current user logging in: " + role);
+            // console.log("Role of the current user logging in: " + role);
           }
         })
         .catch(function (error) {
-          console.error(error);
+          // console.error(error);
         });
         
       await database
@@ -120,18 +120,18 @@ export default class LoginScreen extends React.Component {
             data = snapshot.val();
       
             userValues = Object.values(data);
-            console.log(userValues)
+            // console.log(userValues)
             for(let i = 0; i < userValues.length; i++){
               if(userValues[i] = "Restaurant"){
                 role = userValues[i];
               }
           }
             //role = userValues[4];
-            console.log("Role of the current user logging in: " + role);
+            // console.log("Role of the current user logging in: " + role);
           }
         })
         .catch(function (error) {
-          console.error(error);
+          // console.error(error);
         });
         return role;
     } else {

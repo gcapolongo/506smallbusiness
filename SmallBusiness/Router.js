@@ -10,6 +10,8 @@ import UpdateProfile from './student_views/UpdateProfile';
 import EditProfile from './restaurant_views/EditProfile';
 import AddDeal from './restaurant_views/AddDeal';
 
+import firebase from 'firebase/app'
+import "firebase/auth";
 
 import {
     StyleSheet,
@@ -26,10 +28,13 @@ function LoginView({ navigation }) {
 }
 
 function HomeView({navigation}) {
+    var currUser = firebase.auth().currentUser.uid
     return (
-        <AppStack nav = {navigation}/>
+        <AppStack nav = {navigation} user = {currUser} />
     )
 }
+
+
 
 function RestaurantUserView({navigation}) {
     return (
