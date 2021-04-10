@@ -1,5 +1,16 @@
-const { createRestaurantAcct } = require('../restaurant_views/CreateRestaurant');
+//const { createRestaurantAcct } = require('../restaurant_views/CreateRestaurant');
+import React from 'react';
+import CreateRestaurant from '../restaurant_views/CreateRestaurant';
+import renderer from 'react-test-renderer';
 
+
+describe("Student create", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<CreateRestaurant />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+})
+/*
 //constructor for testing purposes
 const testRestaurant = {
     email: "testEmail@gmail.com",
@@ -63,3 +74,4 @@ test('Should successfully return account role',() =>{
     expect(this.role).toBe('Restaurant');
 
 });
+*/
