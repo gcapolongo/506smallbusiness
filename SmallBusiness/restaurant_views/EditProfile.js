@@ -7,7 +7,7 @@ import firebase from "firebase/app";
 import { auth } from "../Fire";
 import { database } from "../Fire"
 
-class UpdateProfile extends React.Component {
+class EditProfile extends React.Component {
 
   constructor(props) {
     super(props);
@@ -25,6 +25,7 @@ class UpdateProfile extends React.Component {
     this.updatePassword = this.updatePassword.bind(this);
     this.updateAddress = this.updateAddress.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
+    this.updateHours = this.updateHours.bind(this)
 
   }
 
@@ -43,6 +44,9 @@ class UpdateProfile extends React.Component {
 
     if (this.state.address != "") {
       this.updateAddress();
+    }
+    if (this.state.businessHours != "") {
+      this.updateHours();
     }
 
     /* if (this.state.email != "") {
@@ -107,6 +111,15 @@ class UpdateProfile extends React.Component {
     database.ref("Users")
     .child("Restaurants")
     .child(user.uid).update({ Address: address })
+  }
+
+  updateHours() {
+    var address = this.state.businessHours;
+    var user = auth.currentUser;
+
+    database.ref("Users")
+    .child("Restaurants")
+    .child(user.uid).update({ Hours: this.state.businessHours })
   }
 
 
@@ -228,4 +241,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateProfile;
+export default EditProfile;

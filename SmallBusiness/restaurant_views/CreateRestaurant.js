@@ -19,6 +19,7 @@ export default class CreateRestaurant extends React.Component {
       name: "",
       email: "",
       address: "",
+      hours: "",
       password: "",
       cfpassword: "",
       role: "",
@@ -82,9 +83,9 @@ export default class CreateRestaurant extends React.Component {
     var newData = {
       Name: this.state.name,
       Address: this.state.address,
+      Hours: this.state.hours,
       Email: this.state.email,
       Password: this.state.password,
-      Hours: "",
       Role: "Restaurant",
     };
     //actually sets the data in the database
@@ -111,6 +112,14 @@ export default class CreateRestaurant extends React.Component {
             autoCapitalize="none"
             onChangeText={(address) => this.setState({ address: address })}
             value={this.state.address}
+          />
+          <Text style={styles.inputHeaders}>Business Hours:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Business Hours"
+            autoCapitalize="none"
+            onChangeText={(hours) => this.setState({ hours: hours })}
+            value={this.state.hours}
           />
           <Text style={styles.inputHeaders}>Email Address:</Text>
           <TextInput

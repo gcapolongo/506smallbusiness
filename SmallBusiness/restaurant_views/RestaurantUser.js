@@ -62,6 +62,7 @@ export default class RestaurantUser extends React.Component {
         let data = "";
         let location = "";
         let name = "";
+        let hours = ""
         let userValues = "";
 
         if (user) {
@@ -76,14 +77,14 @@ export default class RestaurantUser extends React.Component {
               .then(function (snapshot) {
                 if (snapshot.exists()) {
                   data = snapshot.val();
-            
-                  userValues = Object.values(data);
 
                   //prints restaurant data
-                  console.log(userValues)
+                  console.log("RESTAURANT DATA")
+                  console.log(data)
 
-                  location = userValues[0];
-                  name = userValues[2];
+                  location = data.Address;
+                  name = data.Name;
+                  hours = data.Hours
                 
                 }
               })
@@ -93,6 +94,7 @@ export default class RestaurantUser extends React.Component {
               //updates state variables 
               this.setState({location: location})
               this.setState({name: name})
+              this.setState({businesshours: hours })
               console.log("Restaurant address: " + this.state.location)
               console.log("Restaurant name: " + this.state.name)
 
@@ -109,10 +111,10 @@ export default class RestaurantUser extends React.Component {
             <ScrollView>
                 <View style={styles.container}>
                     <Text style={[styles.title, { fontSize: 32, marginLeft: 0 }]}>Small Business Deals</Text>
-                    <Text style={styles.title}>Mirch Masala</Text>
+                    <Text style={styles.title}>{this.state.name}</Text>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.inputHeaders}>Address: 449 State St, Madison, WI 53703</Text>
-                        <Text style={styles.inputHeaders}>Business Hours: 10 am - 10 pm </Text>
+                        <Text style={styles.inputHeaders}>Address: {this.state.location}</Text>
+                        <Text style={styles.inputHeaders}>Business Hours: {this.state.businesshours}</Text>
                         <Text style={styles.inputHeaders}>Rating: 3.5</Text>
                         <TouchableOpacity style={[styles.btnStyle, { width: 150, height: 50 }]}
                             onPress={this.handleEdit}>
@@ -125,9 +127,6 @@ export default class RestaurantUser extends React.Component {
                                 <Card>
                                     <Card.Title style={[styles.cardTitle, {flexDirection: "row"}]}>
                                         <Text style={{}}>{deal.title}</Text>
-                                        <TouchableOpacity style={[styles.btnStyle, { width: 100, height: 30 }] }>
-                                            <Text style={[styles.btnText,{ fontSize: 12}]}>Delete</Text>
-                                        </TouchableOpacity>
                                     </Card.Title>
                                     <Card.Divider />
                                     <Image
@@ -135,7 +134,10 @@ export default class RestaurantUser extends React.Component {
                                         source={{ uri: this.props.image }}
                                     />
                                     <Text style={styles.cardText}>{deal.description}</Text>
-                                    
+                                    <TouchableOpacity style={[styles.btnStyle, { width: 100, height: 30 }] }>
+                                        <Text style={[styles.btnText,{ fontSize: 12}]}>Delete</Text>
+                                    </TouchableOpacity>
+
                                 </Card>
                             ))}
                         <ScrollView>
