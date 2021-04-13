@@ -124,7 +124,7 @@ export default class RestaurantUser extends React.Component {
                         <Text style={styles.title}>Deals </Text>
                         
                             {this.state.deals.Deals.map((deal, index) =>(
-                                <Card>
+                                <Card key={index}>
                                     <Card.Title style={[styles.cardTitle, {flexDirection: "row"}]}>
                                         <Text style={{}}>{deal.title}</Text>
                                     </Card.Title>
