@@ -29,20 +29,6 @@ export default class AppStack extends React.Component {
                 }}>
 
                 <AppTabs.Screen
-                    name="Map"
-                    options={{
-                        tabBarLabel: 'Map',
-                        tabBarOptions: {
-                            activeTintColor: 'tomato',
-                            inactiveTintColor: 'gray',
-                        },
-                        animationEnabled: true,
-                    }}>
-
-                    {(props) => <Map />}
-                </AppTabs.Screen>
-
-                <AppTabs.Screen
                     name="HomeScreen"
                     options={{
                         tabBarLabel: 'Restaurants',
@@ -54,6 +40,20 @@ export default class AppStack extends React.Component {
                     }}>
 
                     {(props) => <HomeScreen {...props} nav={this.props.nav} />}
+                </AppTabs.Screen>
+
+                <AppTabs.Screen
+                    name="Map"
+                    options={{
+                        tabBarLabel: 'Map',
+                        tabBarOptions: {
+                            activeTintColor: 'tomato',
+                            inactiveTintColor: 'gray',
+                        },
+                        animationEnabled: true,
+                    }}>
+
+                    {(props) => <Map />}
                 </AppTabs.Screen>
 
                 <AppTabs.Screen
