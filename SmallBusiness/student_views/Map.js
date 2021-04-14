@@ -57,7 +57,6 @@ export default class Map extends React.Component {
             currentLong: 0
         }
         this.getLocationData = this.getLocationData.bind(this);
-        this.getDirections = this.getDirections.bind(this);
         this.getNewLocation = this.getNewLocation.bind(this);
     }
 
@@ -123,8 +122,8 @@ export default class Map extends React.Component {
         } )
     }
 
-    getDirections() {
-        Alert.alert("Information");
+    getDirectionRoute(index) {
+        console.log("getDirections called");
     }
 
     render() {
@@ -138,7 +137,7 @@ export default class Map extends React.Component {
                 {this.state.coordinates.map((item, index) => 
                     <MapView.Marker 
                         key={index} 
-                        onPress={this.getDirections} 
+                        onPress={() => this.getDirectionRoute(index)} 
                         coordinate={item} 
                         title={this.state.businessNames[index]}
                         />)}
