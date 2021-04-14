@@ -1,6 +1,7 @@
 import React from 'react';
 import MapViewDirections from 'react-native-maps-directions';
 import MapView from 'react-native-maps';
+import { database } from '../Fire';
 
 import {
     Text,
@@ -48,10 +49,82 @@ export default class Map extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            coordinates: [],
+            businessNames: [],
+            currentLat: 0,
+            currentLong: 0
+        }
+        this.getLocationData = this.getLocationData.bind(this);
+        this.getDirections = this.getDirections.bind(this);
+        this.getNewLocation = this.getNewLocation.bind(this);
     }
 
-    onPress = () => {
-        Alert.alert("Information", "You just clicked a map marker!");
+    /**
+     * calls the asynchronous function to grab our initial data from firebase
+     * to render the markers. Also gets the initial current location of the user
+     * and updates the state
+     */
+    componentDidMount() {
+        this.getLocationData();
+        navigator.geolocation.getCurrentPosition(position => {
+            // set the current location state every time it changes
+            this.setState({
+                currentLat: position.coords.latitude,
+                currentLong: position.coords.longitude
+            })
+            console.log("Initial location");
+            console.log(this.state.currentLat);
+            console.log(this.state.currentLong);
+        })
+    }
+
+    /**
+     * Gets the new location every time the user moves the map
+     * or changes location and updates the state
+     */
+    getNewLocation() {
+        navigator.geolocation.getCurrentPosition(position => {
+            // set the current location state every time it changes
+            this.setState({
+                currentLat: position.coords.latitude,
+                currentLong: position.coords.longitude
+            })
+            console.log("New location");
+            console.log(this.state.currentLat);
+            console.log(this.state.currentLong);
+        })
+    }
+
+    /**
+     * gets the location data of each restaurant from firebase and
+     * stores the objects in a state variable for future use
+     */
+    async getLocationData() {
+        console.log("LOCATION DATA");
+        let locations = [];
+        let name = [];
+
+        var query = database.ref("Users").child("Restaurants").orderByKey();
+        query.once("value")
+        .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                var key = childSnapshot.val();
+                locations.push(key.location);
+                name.push(key.Name);
+            })
+        }).catch(error => { console.log(error) })
+        .finally( ret => {
+            this.setState({coordinates: locations});
+            this.setState({businessNames: name});
+            console.log(this.state.businessNames);
+            console.log(this.state.coordinates);
+        } )
+    }
+
+    getDirections() {
+        Alert.alert("Information");
     }
 
     render() {
@@ -60,9 +133,15 @@ export default class Map extends React.Component {
             style={styles.mapContainer}
             initialRegion = {origin}
             showsUserLocation = {true}
+            onRegionChange={this.getNewLocation}
             >
-                {coordinates.map((item, index) => 
-                    <MapView.Marker key={index} onPress={this.onPress} coordinate={item} />)}
+                {this.state.coordinates.map((item, index) => 
+                    <MapView.Marker 
+                        key={index} 
+                        onPress={this.getDirections} 
+                        coordinate={item} 
+                        title={this.state.businessNames[index]}
+                        />)}
                 <MapViewDirections 
                     origin={departure}
                     destination={arrival}
