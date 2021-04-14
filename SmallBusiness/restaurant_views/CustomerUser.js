@@ -5,26 +5,103 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Image,
+    Image
 } from 'react-native';
+
 import { Card } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
+import sample_deals from '../sample_deals.json'
 
+import { auth } from "../Fire";
+import { database } from "../Fire"
 
 export default class CustomerUser extends React.Component {
 
     constructor(props) {
         super(props);
+
+        //TODO: remove this when firebase is connected
+        let data = JSON.parse(JSON.stringify(sample_deals))
         this.state = {
-            name: "Place",
-            location: "Holders",
-            rating: "-"
+            uid: "",
+            name: "-",
+            location: "-",
+            rating: "-",
+            businesshours: "-",
+            deals: data,
         }
+
+        this.handleEdit = this.handleEdit.bind(this);
+    }
+
+    async componentDidMount() {
+        //TODO: fetch data from firebase here
+        //let uid = route.params.uid
+        //console.log("UID : " + uid)
+        this.getInfo();
+
     }
 
     // event handler for add deal button
-    addDeal() {
+    addDeal = () => {
         console.log("added new deal")
+        this.props.nav.navigate("Add Deal")
+    }
+
+
+    //handles profile edit
+    handleEdit = () => {
+        this.props.nav.navigate("Update Restaurant");
+    }
+
+    /**
+     * Gets the restaurant's name and address
+     */
+    getInfo = async () => {
+        var user = auth.currentUser;
+        let data = "";
+        let location = "";
+        let name = "";
+        let hours = ""
+        let userValues = "";
+
+        if (user) {
+            // User is signed in.
+            console.log("Current signed in user's UID: " + user.uid);
+
+            await database
+                .ref("Users")
+                .child("Restaurants")
+                .child(user.uid)
+                .get()
+                .then(function (snapshot) {
+                    if (snapshot.exists()) {
+                        data = snapshot.val();
+
+                        //prints restaurant data
+                        console.log("RESTAURANT DATA")
+                        console.log(data)
+
+                        location = data.Address;
+                        name = data.Name;
+                        hours = data.Hours
+
+                    }
+                })
+                .catch(error => { console.log(error) })
+                .finally(ret => {
+                    //updates state variables 
+                    this.setState({ location: location })
+                    this.setState({ name: name })
+                    this.setState({ businesshours: hours })
+                    console.log("Restaurant address: " + this.state.location)
+                    console.log("Restaurant name: " + this.state.name)
+                })
+
+        } else {
+            // No user is signed in.
+            alert("Not signed in");
+        }
     }
 
     render() {
@@ -32,43 +109,30 @@ export default class CustomerUser extends React.Component {
             <ScrollView>
                 <View style={styles.container}>
                     <Text style={[styles.title, { fontSize: 32, marginLeft: 0 }]}>Small Business Deals</Text>
-                    <Text style={styles.title}>Mirch Masala</Text>
+                    <Text style={styles.title}>{this.state.name}</Text>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.inputHeaders}>Address: 449 State St, Madison, WI 53703</Text>
-                        <Text style={styles.inputHeaders}>Business Hours: 10 am - 10 pm </Text>
+                        <Text style={styles.inputHeaders}>Address: {this.state.location}</Text>
+                        <Text style={styles.inputHeaders}>Business Hours: {this.state.businesshours}</Text>
                         <Text style={styles.inputHeaders}>Rating: 3.5</Text>
+
                         <Text style={styles.title}>Deals </Text>
+
+                        {this.state.deals.Deals.map((deal, index) => (
+                            <Card>
+                                <Card.Title style={[styles.cardTitle, { flexDirection: "row" }]}>
+                                    <Text style={{}}>{deal.title}</Text>
+                                </Card.Title>
+                                <Card.Divider />
+                                <Image
+                                    resizeMode="cover"
+                                    source={{ uri: this.props.image }}
+                                />
+                                <Text style={styles.cardText}>{deal.description}</Text>
+
+                            </Card>
+                        ))}
                         <ScrollView>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>25% off entire order</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: 25% of any order over 10$</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>Any 2 items for 7$ each</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: Get any two items from select menu options for 7$ each</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
-                            <Card>
-                                <Card.Title style={styles.cardTitle}>Free side</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    resizeMode="cover"
-                                    source={{ uri: this.props.image }}
-                                />
-                                <Text style={styles.cardText}>Description: Get a free side over any order of 25$ or more</Text>
-                                <Text style={styles.cardText}>Valid until: 3/31 </Text>
-                            </Card>
+
                         </ScrollView>
                     </View>
                 </View>
@@ -113,6 +177,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 20,
         height: 70,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    btnStyle: {
+        backgroundColor: "black",
+        width: 125,
+        borderRadius: 5,
+        marginTop: 10,
+        height: 35,
         alignItems: "center",
         justifyContent: "center",
     },
