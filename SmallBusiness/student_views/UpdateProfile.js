@@ -87,6 +87,9 @@ class UpdateProfile extends React.Component {
   updateUsername() {
     var username = this.state.username;
     var user = auth.currentUser;
+    database.ref("Users")
+    .child("Customers")
+    .child(user.uid).update({ Username: username})
     //TODO: get name to display on profile page
   }
 
@@ -115,6 +118,9 @@ class UpdateProfile extends React.Component {
   updateAddress() {
     var address = this.state.address;
     var user = auth.currentUser;
+    database.ref("Users")
+    .child("Customers")
+    .child(user.uid).update({ Address: address})
     //TODO: display this on the user's profile page
   }
 

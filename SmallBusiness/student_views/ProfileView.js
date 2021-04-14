@@ -27,7 +27,10 @@ export default class ProfileView extends React.Component {
         this.state = {
             businesses: data,
             userFavorites: [],
-            filteredFavorites: []
+            filteredFavorites: [],
+            username: "",
+            userContact: "",
+            userAddress: ""
         };
 
         this.registerRestaurant = this.registerRestaurant.bind(this);
@@ -35,21 +38,21 @@ export default class ProfileView extends React.Component {
         this.getFavorites = this.getFavorites.bind(this)
         this.getRestaurants = this.getRestaurants.bind(this)
         this.filterFavorites = this.filterFavorites.bind(this)
+        this.getUserData = this.getUserData.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.filterFavorites()
+        this.getUserData()
     }
 
-    async getFavorites() {
-
-        console.log("GETTING FAVS")
-
+    async getUserData() {
         let value;
+        let user = auth.currentUser
         await database
             .ref("Users")
             .child("Customers")
-            .child(this.props.user)
+            .child(user.uid)
             .get()
             .then(function (snapshot) {
                 if (snapshot.exists()) {
@@ -57,41 +60,68 @@ export default class ProfileView extends React.Component {
                 }
             }
             )
-        
-        console.log(value.Favorites)
-        this.setState({ userFavorites: value.Favorites })
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                console.log(value.Favorites)
+                this.setState({ username: value.Username })
+                this.setState({ userAddress: value.Address })
+
+            })
     }
 
-    async getRestaurants(){
+    async getFavorites() {
+
+        console.log("GETTING FAVS")
+        let user = auth.currentUser
+
+        let value;
+        await database
+            .ref("Users")
+            .child("Customers")
+            .child(user.uid)
+            .get()
+            .then(function (snapshot) {
+                if (snapshot.exists()) {
+                    value = snapshot.val()
+                }
+            }
+            )
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                console.log(value.Favorites)
+                this.setState({ userFavorites: value.Favorites })
+
+            })
+    }
+
+    async getRestaurants() {
 
         console.log("GETTING RESTAU")
 
         let restaurants = []
         let userValues;
-       await database
-       .ref("Users")
-       .child("Restaurants")
-       .get()
-       .then(function (snapshot) {
-         if (snapshot.exists()) {
-           const value = snapshot.val()
-           userValues = Object.values(value)
-            // console.log("VALUE HOMESCREEN")
-            // console.log(value)
+        await database
+            .ref("Users")
+            .child("Restaurants")
+            .get()
+            .then(function (snapshot) {
+                if (snapshot.exists()) {
+                    const value = snapshot.val()
+                    userValues = Object.values(value)
+                    // console.log("VALUE HOMESCREEN")
+                    // console.log(value)
+                }
             }
-        }
-        )
-
-        userValues.map((item) => (
-               restaurants.push(item)
-        ))
-
-        this.setState({businesses: restaurants})
-
+            )
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                userValues.map((item) => (
+                    restaurants.push(item)
+                ))
+                this.setState({ businesses: restaurants })
+            })
     }
 
-
-    
     registerRestaurant() {
         this.props.nav.navigate("Customer User");
     }
@@ -105,18 +135,17 @@ export default class ProfileView extends React.Component {
         await this.getFavorites()
         let favorites = []
 
-        this.state.businesses.map((item) =>
-            {
-                // console.log("ITEEM in profile")
-                // console.log(item)
-                if(this.state.userFavorites.includes(item.Name)){
-                    favorites.push(item)
-                }
+        this.state.businesses.map((item) => {
+            // console.log("ITEEM in profile")
+            // console.log(item)
+            if (this.state.userFavorites.includes(item.Name)) {
+                favorites.push(item)
             }
-            )
+        }
+        )
 
 
-        this.setState({filteredFavorites: favorites})
+        this.setState({ filteredFavorites: favorites })
     }
 
 
@@ -128,10 +157,10 @@ export default class ProfileView extends React.Component {
                         Small Business Deals
                 </Text>
                     <Text style={styles.subHeading}>
-                        John Doe (jdoe)
-                </Text>
-                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Address: 123 W Johnson St, Madison, WI 53703</Text>
-                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Contact: 123-456-7890</Text>
+                        {this.state.username}
+                    </Text>
+                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Address: {this.state.userAddress}</Text>
+                    {/* <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Contact: 123-456-7890</Text> */}
                     <TouchableOpacity style={[styles.btnStyle, { marginLeft: 30 }]} onPress={this.updateUser}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </TouchableOpacity>
@@ -148,7 +177,7 @@ export default class ProfileView extends React.Component {
                                 address={item.Address}
                                 image={item.photo}
                                 nav={this.props.nav}
-                                filtered  = {this.state.filteredFavorites}
+                                filtered={this.state.filteredFavorites}
                             />
                         ))}
                     </View>

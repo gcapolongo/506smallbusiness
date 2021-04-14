@@ -45,12 +45,12 @@ export default class RestaurantCard extends React.Component {
             this.setState({ favLabel: "In favorites" })
         }
     }
-
+  
     async getUserFavorites() {
 
         // console.log("HERE IN CARD")
 
-        // let user = auth.currentUser
+        let user = auth.currentUser
         // console.log("CUREENT USERR")
         // console.log(user)
         let restaurants = []
@@ -58,7 +58,7 @@ export default class RestaurantCard extends React.Component {
         await database
             .ref("Users")
             .child("Customers")
-            .child(this.props.user)
+            .child(user.uid)
             .get()
             .then(function (snapshot) {
                 if (snapshot.exists()) {
@@ -66,22 +66,25 @@ export default class RestaurantCard extends React.Component {
                 }
             }
             )
-
-        this.setState({ Favorites: value.Favorites })
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                this.setState({ Favorites: value.Favorites })
+            })
     }
 
     registerRestaurant() {
         this.props.nav.navigate("Customer User");
     }
 
-    addFavorite() {
+    async addFavorite() {
+        let user = auth.currentUser
         this.updateLabel()
         let favList = this.state.Favorites
         if (favList.includes(this.props.name) == false) {
             favList.push(this.props.name)
-            database.ref("Users")
+            await database.ref("Users")
                 .child("Customers")
-                .child(this.props.user).update({ Favorites: favList })
+                .child(user.uid).update({ Favorites: favList })
 
             console.log("Favorited")
         }

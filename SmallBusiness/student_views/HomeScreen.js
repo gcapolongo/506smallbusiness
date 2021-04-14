@@ -14,6 +14,7 @@ import business from './smallBusinesses.json'
 
 import { auth } from "../Fire.js";
 import { database } from "../Fire";
+import { cos } from 'react-native-reanimated';
 
 
 export default class HomeScreen extends React.Component {
@@ -28,37 +29,40 @@ export default class HomeScreen extends React.Component {
         this.getRestaurantData = this.getRestaurantData.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getRestaurantData()
     }
 
-    async getRestaurantData(){
-        
+    async getRestaurantData() {
+
         let restaurants = []
         let userValues;
-       await database
-       .ref("Users")
-       .child("Restaurants")
-       .get()
-       .then(function (snapshot) {
-         if (snapshot.exists()) {
-           const value = snapshot.val()
-           userValues = Object.values(value)
-            console.log("VALUE HOMESCREEN")
-            console.log(value)
+        await database
+            .ref("Users")
+            .child("Restaurants")
+            .get()
+            .then(function (snapshot) {
+                if (snapshot.exists()) {
+                    const value = snapshot.val()
+                    userValues = Object.values(value)
+                    console.log("VALUE HOMESCREEN")
+                    console.log(value)
+                }
             }
-        }
-        )
+            )
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                userValues.map((item) => (
+                    restaurants.push(item)
+                ))
 
-        userValues.map((item) => (
-               restaurants.push(item)
-        ))
+                console.log("RESTAURANTS ARRAY")
+                console.log(restaurants)
 
-        console.log("RESTAURANTS ARRAY")
-        console.log(restaurants)
+                this.setState({ businesses: restaurants })
 
-        this.setState({businesses: restaurants})
-        
+            })
+
     }
 
     render() {
@@ -82,8 +86,8 @@ export default class HomeScreen extends React.Component {
                                 name={item.Name}
                                 address={item.Address}
                                 image={item.photo}
-                                nav = {this.props.nav}
-                                user ={this.props.user}
+                                nav={this.props.nav}
+                                user={this.props.user}
                             />
                         ))}
                     </View>
