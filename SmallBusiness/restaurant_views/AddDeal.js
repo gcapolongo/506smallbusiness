@@ -5,6 +5,10 @@ import { View,
         StyleSheet,
         TouchableOpacity } from 'react-native';
 
+//import auth and database from firebase
+import { auth } from "../Fire";
+import { database } from "../Fire";
+
 export default class AddDeal extends React.Component {
     
     constructor(props) {
@@ -18,10 +22,40 @@ export default class AddDeal extends React.Component {
     }
     
     //saves new deal
+    //Maybe in here we create deal array and add to it
+    //the deal array would be located under the restaurant's uid
     addNewDeal = () =>{
         //TODO: implement saving for backend
         alert("New Deal Added!")
+
+        //writes deal data to database
+        this.writeDealData();
+
     }
+
+    /**Should write deal data to database */
+    writeDealData(){
+        let currUser = auth.currentUser;
+        console.log ("Current user UID: " + currUser.uid)
+
+        //path to the specified restaurant's information
+        let dealsRef = database.ref("Users/Restaurants/"+currUser.uid).ref.child("Deals");
+
+        //this pushes the deal's title and description under the Deals
+        //section of the specified restaurant 
+        //it also automatically creates a deals object if there isn't one
+        dealsRef.push().set({
+            Title: this.state.title,
+            Description: this.state.description,
+            });
+
+        //testing
+        console.log("TITLE: " + this.state.title);
+        console.log("DESCRIPTION: " + this.state.description);
+
+
+    }
+    
 
     render() {
         return (
