@@ -20,24 +20,24 @@ export default class AddDeal extends React.Component {
         }
 
     }
-    
+
     //saves new deal
-    //Maybe in here we create deal array and add to it
-    //the deal array would be located under the restaurant's uid
     addNewDeal = () =>{
-        //TODO: implement saving for backend
-        alert("New Deal Added!")
-
         //writes deal data to database
-        this.writeDealData();
-
+        if(this.writeDealData()){
+            alert("New Deal Added!");
+        }
     }
 
     /**Should write deal data to database */
     writeDealData(){
         let currUser = auth.currentUser;
         console.log ("Current user UID: " + currUser.uid)
-
+        
+        //makes sure the user can't leave both fields blank
+        if(this.state.description == "" || this.state.title == ""){
+            alert("Please fill out both fields.");
+        }else{
         //path to the specified restaurant's information
         let dealsRef = database.ref("Users/Restaurants/"+currUser.uid).ref.child("Deals");
 
@@ -52,8 +52,7 @@ export default class AddDeal extends React.Component {
         //testing
         console.log("TITLE: " + this.state.title);
         console.log("DESCRIPTION: " + this.state.description);
-
-
+        }
     }
     
 
