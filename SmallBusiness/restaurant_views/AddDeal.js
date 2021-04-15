@@ -24,9 +24,7 @@ export default class AddDeal extends React.Component {
     //saves new deal
     addNewDeal = () =>{
         //writes deal data to database
-        if(this.writeDealData()){
-            alert("New Deal Added!");
-        }
+        this.writeDealData();
     }
 
     /**Should write deal data to database */
@@ -48,6 +46,8 @@ export default class AddDeal extends React.Component {
             Title: this.state.title,
             Description: this.state.description,
             });
+
+        alert("New Deal Added!");
 
         //testing
         console.log("TITLE: " + this.state.title);
