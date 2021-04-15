@@ -4,46 +4,19 @@ import MapView from 'react-native-maps';
 import { database } from '../Fire';
 
 import {
-    Text,
-    TextInput,
-    TouchableOpacity,
-    ScrollView,
     StyleSheet,
-    View,
-    Dimensions,
     Alert
 } from 'react-native';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAme_A3WZ1uHIq9SAZFg93AyNzTW84KNVU';
+
+// initial map view location of Madison
 const origin = {
     latitude: 43.073051,
     longitude: -89.401230,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
 }
-const departure = {
-    latitude: 43.073051,
-    longitude: -89.401230,
-}
-const arrival = {
-    latitude: 43.075809,
-    longitude: -89.400131,
-}
-
-const coordinates = [
-    {
-        latitude: 43.072670,
-        longitude: -89.395530,
-    },
-    {
-        latitude: 43.074680,
-        longitude: -89.393930,
-    },
-    {
-        latitude: 43.061540,
-        longitude: -89.400420
-    }
-]
 
 export default class Map extends React.Component {
 
@@ -54,7 +27,9 @@ export default class Map extends React.Component {
             coordinates: [],
             businessNames: [],
             currentLat: 0,
-            currentLong: 0
+            currentLong: 0,
+            directions: 0,
+            businessLoc: 0
         }
         this.getLocationData = this.getLocationData.bind(this);
         this.getNewLocation = this.getNewLocation.bind(this);
@@ -122,11 +97,34 @@ export default class Map extends React.Component {
         } )
     }
 
+    /**
+     * Alerts the user of a new route, sets the state of two variables
+     * which tell us if we need to find a route and what business the route
+     * should go to
+     * 
+     * @param {*} index - index of the business we are trying to find a route to 
+     */
     getDirectionRoute(index) {
-        console.log("getDirections called");
+        Alert.alert("Getting Directions!", "Finding route to " + 
+            this.state.businessNames[index]);
+        this.setState({ directions: 1 });
+        this.setState({ businessLoc: index });
     }
 
     render() {
+
+        // holds a directions component for the directions a user
+        // wants to retrieve
+        let currDirection = <MapViewDirections 
+            origin={{ latitude: this.state.currentLat, longitude: this.state.currentLong }}
+            destination={this.state.coordinates[this.state.businessLoc]}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={5}
+            strokeColor="red"
+        />
+        // null component if no directions are to be retrieved
+        let noDirection = (null);
+
         return ( 
             <MapView
             style={styles.mapContainer}
@@ -141,18 +139,13 @@ export default class Map extends React.Component {
                         coordinate={item} 
                         title={this.state.businessNames[index]}
                         />)}
-                <MapViewDirections 
-                    origin={departure}
-                    destination={arrival}
-                    apikey={GOOGLE_MAPS_APIKEY}
-                    strokeWidth={5}
-                    strokeColor="red"
-                />
+                {this.state.directions == 1 ? currDirection : noDirection}
             </MapView> 
         )
     }
 }
 
+// styles for the Map component
 const styles = StyleSheet.create({
     container: {
         flex: 1
