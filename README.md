@@ -10,12 +10,12 @@ How to log in as customer
 Email: customer@gmail.com --
 Password: 123123
 
-Or you can create an account by pressing the "Create Account" button and providing the proper credentials. These will be saved to the firebase database
+Or you can create an account by pressing the "Create Account" button and providing the proper credentials which will take you to the customer version of the app. These will be saved to the firebase database
 
 How to log in as restaurant
 Email: mirchmasala@gmail.com --
 Password: masala
 
-Or you can register a restaurant by pressing the "Register Restaurant" button and providing proper credentials that will take you to the restaurant's version of the app. 
+Or you can register a restaurant by pressing the "Register Restaurant" button and providing proper credentials that will take you to the restaurant version of the app. 
 
 Bug Tracker in Test Folder
