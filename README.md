@@ -7,7 +7,7 @@ Install these dependencies before running the app
 - npm install react-native-maps-directions
 
 How to log in as customer
-Email: customer@gmail.com --
+Email: kim@gmail.com --
 Password: 123123
 
 Or you can create an account by pressing the "Create Account" button and providing the proper credentials which will take you to the customer version of the app. These will be saved to the firebase database
