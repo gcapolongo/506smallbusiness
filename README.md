@@ -17,3 +17,5 @@ Email: mirchmasala@gmail.com --
 Password: masala
 
 Or you can register a different email and password and use those credentials to log in. The credentials are written to the firebase database also.
+
+Bug Tracker in Test Folder
