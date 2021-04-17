@@ -11,7 +11,7 @@ import {
 
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import business from './smallBusinesses.json'
-import userList from './users.json'
+//import userList from './users.json'
 
 import FavoriteList from './FavoriteList'
 import { auth } from "../Fire.js";
