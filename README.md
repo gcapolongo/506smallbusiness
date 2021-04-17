@@ -16,6 +16,6 @@ How to log in as restaurant
 Email: mirchmasala@gmail.com --
 Password: masala
 
-Or you can register a different email and password and use those credentials to log in. The credentials are written to the firebase database also.
+Or you can register a restaurant by pressing the "Register Restaurant" button and providing proper credentials that will take you to the restaurant's version of the app. 
 
 Bug Tracker in Test Folder
