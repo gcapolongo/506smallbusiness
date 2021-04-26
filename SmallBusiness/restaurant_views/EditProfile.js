@@ -1,14 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Dimensions } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { Dimensions } from "react-native";
 
 import firebase from "firebase/app";
 import { auth } from "../Fire";
-import { database } from "../Fire"
+import { database } from "../Fire";
 
 class EditProfile extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -17,20 +26,18 @@ class EditProfile extends React.Component {
       businessHours: "",
       businessName: "",
       password: "",
+    };
 
-    }
-   
     //this.updateEmail = this.updateEmail.bind(this);
-    this.updateName = this.updateAddress.bind(this);
+    this.updateName = this.updateName.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.updateAddress = this.updateAddress.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
-    this.updateHours = this.updateHours.bind(this)
-
+    this.updateHours = this.updateHours.bind(this);
   }
 
   /**
-   * Calling the update methods here changes the customer's 
+   * Calling the update methods here changes the customer's
    * profile details
    */
   saveProfile() {
@@ -38,7 +45,7 @@ class EditProfile extends React.Component {
       this.updateName();
     }
 
-    if (this.state.password != "") {
+    if (this.state.password != "") { 
       this.updatePassword();
     }
 
@@ -52,8 +59,7 @@ class EditProfile extends React.Component {
     /* if (this.state.email != "") {
       this.updateEmail();
     } */
-    alert("Changes Saved.")
-
+    alert("Changes Saved.");
   }
 
   /**
@@ -61,67 +67,75 @@ class EditProfile extends React.Component {
    * and as well in the database.
    */
   updateEmail() {
-    var user = auth.currentUser;
+    let user = auth.currentUser;
     let email = this.state.email;
 
-    //update the email field in database
+    //TODO: finish method
+    //updates the email field in database
     //database.ref("users/" + key).update({ Email: email })
-
   }
 
   /**
-  * Updates the Name field in the database.
-  */
+   * Updates the Name field in the database.
+   */
   updateName() {
-    var name = this.state.businessName;
-    var user = auth.currentUser;
+    let name = this.state.businessName;
+    let user = auth.currentUser;
 
-    database.ref("Users")
-    .child("Restaurants")
-    .child(user.uid).update({ Name: name })
-
+    database
+      .ref("Users")
+      .child("Restaurants")
+      .child(user.uid)
+      .update({ Name: name });
   }
 
   /**
-   * Updates the password in Firebase Authentication and in the specified user's 
+   * Updates the password in Firebase Authentication and in the specified user's
    * password field in the database.
    */
   updatePassword() {
-    var user = auth.currentUser;
-    var newPassword = this.state.password;
-    
-    database.ref("Users")
-    .child("Restaurants")
-    .child(user.uid).update({ Password: newPassword })
+    let user = auth.currentUser;
+    let newPassword = this.state.password;
+
+    database
+      .ref("Users")
+      .child("Restaurants")
+      .child(user.uid)
+      .update({ Password: newPassword});
 
     //update the password in firebase authentication
-    user.updatePassword(password).then(function() {
-    }).catch(function(error) {
-    // error
-    });
+    user
+      .updatePassword(password)
+      .then(function () {})
+      .catch(function (error) {
+        // error
+      });
   }
 
   /**
    * Updates the specified user's address field in the database
    */
   updateAddress() {
-    var address = this.state.address;
-    var user = auth.currentUser;
+    let address = this.state.address;
+    let user = auth.currentUser;
 
-    database.ref("Users")
-    .child("Restaurants")
-    .child(user.uid).update({ Address: address })
+    database
+      .ref("Users")
+      .child("Restaurants")
+      .child(user.uid)
+      .update({ Address: address });
   }
 
   updateHours() {
-    var address = this.state.businessHours;
-    var user = auth.currentUser;
+    let hours = this.state.businessHours;
+    let user = auth.currentUser;
 
-    database.ref("Users")
-    .child("Restaurants")
-    .child(user.uid).update({ Hours: this.state.businessHours })
+    database
+      .ref("Users")
+      .child("Restaurants")
+      .child(user.uid)
+      .update({ Hours: hours });
   }
-
 
   backToLogin() {
     this.props.revokeAccessToken();
@@ -129,7 +143,7 @@ class EditProfile extends React.Component {
 
   /**
    * Displays and collects the profile information.
-   * 
+   *
    */
   render() {
     return (
@@ -139,41 +153,55 @@ class EditProfile extends React.Component {
           <Text style={styles.subtitle}>Profile</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.inputHeaders}>Name</Text>
-            <TextInput style={styles.input}
+            <TextInput
+              style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Business Name"
               placeholderTextColor="#EE8B90"
-              onChangeText={(businessName) => this.setState({ businessName: businessName })}
+              onChangeText={(businessName) =>
+                this.setState({ businessName: businessName })
+              }
               value={this.state.businessName}
-              autoCapitalize="none" />
+              autoCapitalize="none"
+            />
             <Text style={styles.inputHeaders}>Password</Text>
-            <TextInput style={styles.input}
+            <TextInput
+              style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Password"
               placeholderTextColor="#EE8B90"
               onChangeText={(password) => this.setState({ password: password })}
               value={this.state.password}
-              autoCapitalize="none" />
+              autoCapitalize="none"
+            />
             <Text style={styles.inputHeaders}>Address</Text>
-            <TextInput style={styles.input}
+            <TextInput
+              style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Address"
               placeholderTextColor="#EE8B90"
               onChangeText={(address) => this.setState({ address: address })}
-              value={this.state.address + ""}
-              autoCapitalize="none" />
+              value={this.state.address}
+              autoCapitalize="none"
+            />
             <Text style={styles.inputHeaders}>Business Hours</Text>
-            <TextInput style={styles.input}
+            <TextInput
+              style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Business Hours"
               placeholderTextColor="#EE8B90"
-              onChangeText={(businessHours) => this.setState({ businessHours: businessHours })}
+              onChangeText={(businessHours) =>
+                this.setState({ businessHours: businessHours })
+              }
               value={this.state.businessHours}
-              autoCapitalize="none" />
-            
-            
+              autoCapitalize="none"
+            />
+
             <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btnStyle} onPress={() => this.saveProfile()}>
+              <TouchableOpacity
+                style={styles.btnStyle}
+                onPress={() => this.saveProfile()}
+              >
                 <Text style={styles.btnText}>Save Changes</Text>
               </TouchableOpacity>
             </View>
@@ -186,26 +214,26 @@ class EditProfile extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 0
+    marginTop: 0,
   },
   subtitle: {
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 50,
-    marginBottom: 30
+    marginBottom: 30,
   },
   inputHeaders: {
     fontSize: 18,
     textAlign: "left",
     marginTop: 20,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   btnStyle: {
     backgroundColor: "black",
@@ -223,7 +251,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     alignItems: "center",
-    marginTop: 15
+    marginTop: 15,
   },
   input: {
     borderColor: "#7e807f",
@@ -233,11 +261,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     paddingLeft: 5,
-    fontSize: 18
+    fontSize: 18,
   },
   inputContainer: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
 });
 
