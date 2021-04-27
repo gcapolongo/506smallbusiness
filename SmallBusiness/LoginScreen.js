@@ -32,7 +32,6 @@ export default class LoginScreen extends React.Component {
    * Works for both customers and restaurant users
    */
   handleLogin() {
-    
     this.authenticate();
   }
 
@@ -46,12 +45,9 @@ export default class LoginScreen extends React.Component {
   authenticate() {
     auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(async() => {
-
+      .then(async () => {
         //checks role of customer
         this.state.role = await this.checkCustomerRole();
-
-        // console.log("Role of user: " + this.state.role);
 
         if (this.state.role === "Student") {
           //if role is user go to homescreen
@@ -73,16 +69,13 @@ export default class LoginScreen extends React.Component {
       });
   }
 
-  checkCustomerRole = async() => {
-    var user = auth.currentUser;
+  checkCustomerRole = async () => {
+    let user = auth.currentUser;
     let data = "";
     let userValues = "";
     let role = "";
 
     if (user) {
-      // User is signed in.
-      // console.log("Current signed in user's UID: " + user.uid);
-
       await database
         .ref("Users")
         .child("Customers")
@@ -90,17 +83,17 @@ export default class LoginScreen extends React.Component {
         .get()
         .then(function (snapshot) {
           if (snapshot.exists()) {
-            data = snapshot.val();  
-            
+            data = snapshot.val();
+
             userValues = Object.values(data);
 
             //prints an array of the customer's info
             // console.log(userValues)
 
-            for(let i = 0; i < userValues.length; i++){
-                if(userValues[i] = "Student"){
-                  role = userValues[i];
-                }
+            for (let i = 0; i < userValues.length; i++) {
+              if ((userValues[i] = "Student")) {
+                role = userValues[i];
+              }
             }
             //role = userValues[3];
             // console.log("Role of the current user logging in: " + role);
@@ -109,7 +102,7 @@ export default class LoginScreen extends React.Component {
         .catch(function (error) {
           // console.error(error);
         });
-        
+
       await database
         .ref("Users")
         .child("Restaurants")
@@ -118,14 +111,14 @@ export default class LoginScreen extends React.Component {
         .then(function (snapshot) {
           if (snapshot.exists()) {
             data = snapshot.val();
-      
+
             userValues = Object.values(data);
             // console.log(userValues)
-            for(let i = 0; i < userValues.length; i++){
-              if(userValues[i] = "Restaurant"){
+            for (let i = 0; i < userValues.length; i++) {
+              if ((userValues[i] = "Restaurant")) {
                 role = userValues[i];
               }
-          }
+            }
             //role = userValues[4];
             // console.log("Role of the current user logging in: " + role);
           }
@@ -133,13 +126,12 @@ export default class LoginScreen extends React.Component {
         .catch(function (error) {
           // console.error(error);
         });
-        return role;
+      return role;
     } else {
       // No user is signed in.
       alert("Not signed in");
     }
-
-  }
+  };
 
   registerRestaurant() {
     this.props.nav.navigate("Create Restaurant");
@@ -165,6 +157,7 @@ export default class LoginScreen extends React.Component {
             autoCapitalize="none"
             onChangeText={(password) => this.setState({ password: password })}
             value={this.state.password}
+            secureTextEntry={true}
           />
         </View>
         <View style={styles.btnContainer}>
