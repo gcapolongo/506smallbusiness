@@ -135,16 +135,16 @@ export default class CreateStudent extends React.Component {
             autoCapitalize="none"
             onChangeText={(password) => this.setState({ password: password })}
             value={this.state.password}
+            secureTextEntry={true}
           />
           <Text style={styles.inputHeaders}>Confirm Password:</Text>
           <TextInput
             style={styles.input}
             placeholder="Confirm Password"
             autoCapitalize="none"
-            onChangeText={(cfpassword) =>
-              this.setState({ cfpassword: cfpassword })
-            }
+            onChangeText={(cfpassword) => this.setState({ cfpassword: cfpassword })}
             value={this.state.cfpassword}
+            secureTextEntry={true}
           />
         </View>
         <View style={styles.btnContainer}>
