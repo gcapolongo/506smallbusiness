@@ -136,6 +136,7 @@ export default class CreateRestaurant extends React.Component {
             autoCapitalize="none"
             onChangeText={(password) => this.setState({ password: password })}
             value={this.state.password}
+            secureTextEntry={true}
           />
           <Text style={styles.inputHeaders}>Confirm Password:</Text>
           <TextInput
@@ -146,6 +147,7 @@ export default class CreateRestaurant extends React.Component {
               this.setState({ cfpassword: cfpassword })
             }
             value={this.state.cfpassword}
+            secureTextEntry={true}
           />
         </View>
         <View style={styles.btnContainer}>
