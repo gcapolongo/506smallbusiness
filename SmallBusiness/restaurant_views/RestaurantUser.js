@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, TouchableHighlightBase } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TouchableHighlightBase,
+} from "react-native";
 
 import { Card } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { auth } from "../Fire";
 import { database } from "../Fire";
+
 
 export default class RestaurantUser extends React.Component {
   constructor(props) {
@@ -16,22 +24,25 @@ export default class RestaurantUser extends React.Component {
       uid: "",
       name: "-",
       location: "-",
-      rating: "-",
       businesshours: "-",
       dealArray: [],
     };
 
     this.handleEdit = this.handleEdit.bind(this);
     this.getDealData = this.getDealData.bind(this);
+    this.getInfoListener = this.getInfoListener.bind(this);
   }
 
   //Fetching data from firebase via getDealData
-  async componentDidMount() {
+  componentDidMount() {
+
+    //gets the restaurant user's profile info
     this.getInfo();
 
-    //returns an array of deal objects
+    //if deals have been created, this methood reads them
+    //from firebase and displays them in a card component
     this.getDealData();
-  
+
   }
 
   // event handler for add deal button
@@ -46,7 +57,8 @@ export default class RestaurantUser extends React.Component {
   };
 
   /**
-   * Gets the restaurant's name and address
+   * Gets the restaurant's name and address. Only getting data once
+   * for right now, not currently listening for changes
    */
   getInfo = async () => {
     let user = auth.currentUser;
@@ -90,30 +102,49 @@ export default class RestaurantUser extends React.Component {
     }
   };
 
+
   /**
-   * 
+   * This is a test method that should be constantly listening for changes.
+   * Not sure if it works yet because of re rendering issue
    */
-  /* getDealDataa = async () => {
-    var user = auth.currentUser;
+  getInfoListener = async () => {
+    let user = auth.currentUser;
     let data = "";
+    let location = "";
+    let name = "";
+    let hours = "";
 
-    let dealArray = [];
+    if (user) {
+      database
+        .ref("Users")
+        .child("Restaurants")
+        .child(user.uid)
+        .on('value', (snapshot) => { 
+          if (snapshot.exists()) {
+            data = snapshot.val();
 
-    await database
-      .ref("Users")
-      .child("Restaurants")
-      .child(user.uid)
-      .child("Deals")
-      .once("value", function (snapshot) {
-        if (snapshot.exists()) {
-          data = snapshot.val();
-          console.log(data);
-        }
-      })
-      .catch(function (error) {
-        // console.error(error);
-      });
-  }; */
+            //prints restaurant data
+            console.log("RESTAURANT DATA"); 
+            console.log(data);
+
+            location = data.Address;
+            name = data.Name;
+            hours = data.Hours;
+          }
+        })
+  
+      //updates state variables
+      this.setState({ location: location });
+      this.setState({ name: name });
+      this.setState({ businesshours: hours });
+      console.log("Restaurant address: " + this.state.location);
+      console.log("Restaurant name: " + this.state.name);
+    } else {
+      // No user is signed in.
+      alert("Not signed in");
+    }
+  };
+
 
   /**
    * Grabs deal information from database (Title, Description)
@@ -129,8 +160,6 @@ export default class RestaurantUser extends React.Component {
       .child("Deals")
       .once("value", (snapshot) => {
         snapshot.forEach((childSnapshot) => {
-          let childKey = childSnapshot.key;
-          //child key prints the key of each deal object
 
           let childData = childSnapshot.val();
 
@@ -138,8 +167,8 @@ export default class RestaurantUser extends React.Component {
         });
       });
 
+    //update state variable
     this.setState({ dealArray: returnArr });
-    
   };
 
   render() {
@@ -157,7 +186,6 @@ export default class RestaurantUser extends React.Component {
             <Text style={styles.inputHeaders}>
               Business Hours: {this.state.businesshours}
             </Text>
-            <Text style={styles.inputHeaders}>Rating: 3.5</Text>
             <TouchableOpacity
               style={[styles.btnStyle, { width: 150, height: 50 }]}
               onPress={this.handleEdit}
