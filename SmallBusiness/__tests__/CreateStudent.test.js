@@ -1,65 +1,122 @@
-const { CreateStudent } = require('../student_views/CreateStudent');
+//const { createRestaurantAcct } = require('../restaurant_views/CreateRestaurant');
+import React from 'react';
+import CreateStudent from '../student_views/CreateStudent';
+import renderer from 'react-test-renderer';
+//for firebase database testing
+import firebaseAdmin from './firebase';
+import { database } from '../Fire';
+const CreateStudent = require("./student_views/CreateStudent");
 
-//constructor for testing purposes
-const testStudent= {
-    email: "testEmail@gmail.com",
-    username: "testStudent",
-    password: "12345678",
-    cfpassword: "12345678",
-    uid: "something",
-    role: "Student",
-}
+const testStudent = CreateStudent( 
+    'studentemail@wisc.edu',
+    'student address',
+    'testStudent',
+    '12345678',
+    '12345678',
+    '12345678',
+    '',
+    'Student',
+    ''
+); 
 
-test('Should successfully return account email',() =>{
+//can instantiate CreateStudent (or just student) object
+test("Should be able to create a student object", () => {
+    const student = new CreateStudent();
+    expect(typeof(student).toBe("object"))
 
-    const testStudent = new CreateStudent;
+//check that student username is added to database
+describe('Create Student', () => {
+    it('it checks if new student username is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currUserName = database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.username)
+        .get()
 
-    testStudent.CreateAccount();
-    
-    expect(this.email).toBe('testEmail@gmail.com');
+        expect(currUserName).toBe("testStudent")
+    })
+})
 
-});
+//check that student email is added to database
+describe('Create Student', () => {
+    it('it checks if new student email is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currEmail = database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.email)
+        .get()
 
-test('Should successfully return account password',() =>{
-    const testStudent = new CreateStudent;
+        expect(currEmail).toBe("testStudent@wisc.edu")
+    })
+})
 
-    testStudent.CreateAccount();
-    
-    expect(this.password).toBe('12345678');
+//check that student address is added to database
+describe('Create Student', () => {
+    it('it checks if new student address is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currAddress = database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.address)
+        .get()
 
-});
+        expect(currAddress).toBe("student address")
+    })
+})
 
-test('Should successfully return student username',() =>{
-    const testStudent = new CreateStudent;
+//check that student password is added to database
+describe('Create Student', () => {
+    it('it checks if new student password is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currPassword= database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.password)
+        .get()
 
-    testStudent.CreateAccount();
-    
-    expect(this.name).toBe('testStudent');
+        expect(currPassword).toBe("12345678")
+    })
+})
 
-});
+//check that student number is added to database
+describe('Create Student', () => {
+    it('it checks if new student number is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currNumber= database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.number)
+        .get()
 
-test('Should successfully return Student UIDs',() =>{
-    const testStudent = new CreateStudent;
+        expect(currNumber).toBe("12345678")
+    })
+})
 
-    testStudent.CreateAccount();
-    
-    expect(this.address).toBe('something');
+//check that student role is added to database
+describe('Create Student', () => {
+    it('it checks if new student role is in database', async ()=>{
+        //assuming this binds
+        //then student acc should be made, so we can check in database for it
+        //check database for restaurant
+        const currUserRole = database
+        .ref("Users")
+        .child("Customers")
+        .child(testStudent.role)
+        .get()
 
-});
-
-test('Should successfully return account cfpassword',() =>{
-    const testStudent = new CreateStudent;
-
-    testStudent.CreateAccount();
-  
-    expect(this.cfpassword).toBe('12345678');
-});
-
-test('Should successfully return account role',() =>{
-    const testStudent = new CreateStudent;
-
-    testStudent.CreateAccount();
-    
-    expect(this.role).toBe('Student');
-
-});
+        expect(currUserRole).toBe("Student")
+    })
+ })
+})
