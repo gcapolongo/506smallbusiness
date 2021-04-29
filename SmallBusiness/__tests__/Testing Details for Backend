@@ -1,16 +1,8 @@
-For testing backend, we are using jest, chai, and puppeteer
+For testing backend, we are using jest and react native's testing library
 
 Here are the dependencies:
 Jest:
 -npm install --save-dev jest
 
-chai:
-npm install chai
-
-pupeteer:
-npm install --save-dev puppeteer
-
-Currently, tests are still a work in progress and just need to written clearly. The tests currently in this folder will fail...because I'm still getting familiar with ReactJS. 
-
-I'll leave testing updates here 
+We can leave testing updates here 
 -Kudirat Alimi
