@@ -1,6 +1,13 @@
 import React from "react";
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, TouchableHighlightBase } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TouchableHighlightBase,
+} from "react-native";
 
 import { Card } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
@@ -19,6 +26,7 @@ export default class RestaurantUser extends React.Component {
       rating: "-",
       businesshours: "-",
       dealArray: [],
+      keyArray: [],
     };
 
     this.handleEdit = this.handleEdit.bind(this);
@@ -27,13 +35,14 @@ export default class RestaurantUser extends React.Component {
 
   //Fetching data from firebase via getDealData
   async componentDidMount() {
-    this._navListener = this.props.nav.addListener('focus', () => {
+    this._navListener = this.props.nav.addListener("focus", () => {
+      //get profile info
       this.getInfo();
-  })
 
-    //returns an array of deal objects
-    this.getDealData();
-  
+      //constantly update deal data as info gets added
+      this.getDealData();
+    });
+    
   }
 
   // event handler for add deal button
@@ -57,7 +66,6 @@ export default class RestaurantUser extends React.Component {
     let name = "";
     let hours = "";
 
-    //only gets the data once at the moment, needs to listen for changes
     if (user) {
       await database
         .ref("Users")
@@ -93,34 +101,15 @@ export default class RestaurantUser extends React.Component {
   };
 
   /**
-   * 
-   */
-  /* getDealDataa = async () => {
-    var user = auth.currentUser;
-    let data = "";
-    let dealArray = [];
-    await database
-      .ref("Users")
-      .child("Restaurants")
-      .child(user.uid)
-      .child("Deals")
-      .once("value", function (snapshot) {
-        if (snapshot.exists()) {
-          data = snapshot.val();
-          console.log(data);
-        }
-      })
-      .catch(function (error) {
-        // console.error(error);
-      });
-  }; */
-
-  /**
    * Grabs deal information from database (Title, Description)
    */
   getDealData = async () => {
     let user = auth.currentUser;
-    let returnArr = [];
+    let returnArr = []; //stores deal objects
+
+    //stores the keys of each deal object so we
+    //can retrieve them later
+    let keyArr = []; 
 
     await database
       .ref("Users")
@@ -130,17 +119,40 @@ export default class RestaurantUser extends React.Component {
       .once("value", (snapshot) => {
         snapshot.forEach((childSnapshot) => {
           let childKey = childSnapshot.key;
-          //child key prints the key of each deal object
+          keyArr.push(childKey);
 
           let childData = childSnapshot.val();
-          console.log("CHILD DATA " + childData )
 
           returnArr.push(childData);
-        });
+        })
       });
+      
 
     this.setState({ dealArray: returnArr });
-    
+    this.setState({ keyArray: keyArr });
+  };
+
+  /**
+   * Deletes selected deal from the deal list in database
+   * as well as from the deal list in the app
+   */
+  deleteDeal = async (index) => {
+    let user = auth.currentUser;
+
+    //get the key array data at that index
+    let dealKey = this.state.keyArray[index];
+    console.log(dealKey);
+
+    await database
+      .ref("Users")
+      .child("Restaurants")
+      .child(user.uid)
+      .child("Deals")
+      .child(dealKey)
+      .remove();
+
+      //refreshes the list after item is deleted
+      await this.getDealData();
   };
 
   render() {
@@ -158,6 +170,7 @@ export default class RestaurantUser extends React.Component {
             <Text style={styles.inputHeaders}>
               Business Hours: {this.state.businesshours}
             </Text>
+            <Text style={styles.inputHeaders}>Rating: 3.5</Text>
             <TouchableOpacity
               style={[styles.btnStyle, { width: 150, height: 50 }]}
               onPress={this.handleEdit}
@@ -178,6 +191,7 @@ export default class RestaurantUser extends React.Component {
                 <Text style={styles.cardText}>{deal.Description}</Text>
                 <TouchableOpacity
                   style={[styles.btnStyle, { width: 100, height: 30 }]}
+                  onPress={() => this.deleteDeal(index)}
                 >
                   <Text style={[styles.btnText, { fontSize: 12 }]}>Delete</Text>
                 </TouchableOpacity>
