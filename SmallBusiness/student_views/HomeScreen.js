@@ -108,6 +108,10 @@ export default class HomeScreen extends React.Component {
         this.setState({selected: chosen})
     }
 
+    backHomeHelper =() =>{
+        this.setState({pressed:false})
+    }
+
     findBusiness(){
         console.log("Finding business")
         console.log("Status is " + this.state.pressed)
@@ -123,20 +127,25 @@ export default class HomeScreen extends React.Component {
 
         console.log("HOLDER IS " + holder[0].Name)
 
-        return (    
+        return (
+            
+            
             <ScrollView>
-            {holder.map((item, index) => (
-                // console.log("IN THE MAP FUNC")
-                <CustomerUser
-                    key={index}
-                    name={item.Name}
-                    address={item.Address} 
-                    image={item.Photo}
-                    hours = {item.Hours}
-                    nav={this.props.nav}
-                    user={this.props.user}
-                />
-        ))}
+                <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]} onPress={this.backHomeHelper}>
+                    <Text style={styles.btnText}>Back to Home</Text>
+                </TouchableOpacity>
+                {holder.map((item, index) => (
+                    // console.log("IN THE MAP FUNC")
+                    <CustomerUser
+                        key={index}
+                        name={item.Name}
+                        address={item.Address} 
+                        image={item.Photo}
+                        hours = {item.Hours}
+                        nav={this.props.nav}
+                        user={this.props.user}
+                    />
+                ))}
             </ScrollView>
         )
     }
