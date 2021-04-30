@@ -104,6 +104,7 @@ export default class HomeScreen extends React.Component {
     }
 
     getChosen(chosen){
+        console.log("CHOSEN IS " +chosen)
         this.setState({selected: chosen})
     }
 
@@ -115,10 +116,12 @@ export default class HomeScreen extends React.Component {
         let holder = []
         
         this.state.businesses.map((item) => {
-            if (item.Name == this.state.pressed){
+            if (item.Name == this.state.selected){
                 holder.push(item)
             }
         })
+
+        console.log("HOLDER IS " + holder[0].Name)
 
         return (    
             <ScrollView>

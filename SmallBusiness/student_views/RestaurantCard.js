@@ -110,7 +110,7 @@ export default class RestaurantCard extends React.Component {
     }
 
     updateChosen(){
-        this.props.pressedFunc(this.props.name)
+        this.props.chosenFunc(this.props.name)
 
     }
     // this.props.nav.navigate("Customer User");

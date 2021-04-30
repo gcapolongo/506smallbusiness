@@ -42,12 +42,12 @@ export default class FavoriteList extends React.Component {
                     <Text style={styles.cardText}>Address: {this.props.address} </Text>
                     <Text style={styles.cardText}>Business Hours: {this.props.hours} </Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.btnStyle} onPress={this.registerRestaurant}>
+                        {/* <TouchableOpacity style={styles.btnStyle} onPress={this.registerRestaurant}>
                             <Text style={styles.btnText}>View Deals</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]}>
+                        </TouchableOpacity> */}
+                        {/* <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]}>
                             <Text style={styles.btnText}>Remove</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </Card>
             </View>
