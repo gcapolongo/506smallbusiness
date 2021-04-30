@@ -170,7 +170,7 @@ export default class RestaurantUser extends React.Component {
             <Text style={styles.inputHeaders}>
               Business Hours: {this.state.businesshours}
             </Text>
-            <Text style={styles.inputHeaders}>Rating: 3.5</Text>
+            {/* <Text style={styles.inputHeaders}>Rating: 3.5</Text> */}
             <TouchableOpacity
               style={[styles.btnStyle, { width: 150, height: 50 }]}
               onPress={this.handleEdit}
