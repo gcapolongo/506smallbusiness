@@ -74,6 +74,7 @@ export default class ProfileView extends React.Component {
                 // console.log(value.Favorites)
                 this.setState({ username: value.Username })
                 this.setState({ userAddress: value.Address })
+                this.setState({ userContact: value.Contact })
 
             })
     }
@@ -211,7 +212,7 @@ export default class ProfileView extends React.Component {
                         {this.state.username}
                     </Text>
                     <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Address: {this.state.userAddress}</Text>
-                    {/* <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Contact: 123-456-7890</Text> */}
+                    <Text style={[styles.subtitle, { fontSize: 15, marginTop: 10, fontWeight: "100" }]}>Contact: 123-456-7890</Text>
                     <TouchableOpacity style={[styles.btnStyle, { marginLeft: 30 }]} onPress={this.updateUser}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </TouchableOpacity>
@@ -226,6 +227,7 @@ export default class ProfileView extends React.Component {
                                 key={index}
                                 name={item.Name}
                                 address={item.Address}
+                                hours = {item.Hours}
                                 image={item.photo}
                                 nav={this.props.nav}
                                 filtered={this.state.filteredFavorites}
