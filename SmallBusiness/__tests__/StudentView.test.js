@@ -13,13 +13,13 @@ describe("Student Home Page", () => {
     })
 });
 
-describe("Student Profile Page", () => {
+/*describe("Student Profile Page", () => {
     it("renders correctly", () => {
         const tree = renderer.create(<ProfileView />).toJSON();
         expect(tree).toMatchSnapshot();
     })
 });
-
+*/
 describe("Favorites Page", () => {
     it("renders correctly", () => {
         const tree = renderer.create(<FavoriteList />).toJSON();
@@ -27,13 +27,13 @@ describe("Favorites Page", () => {
     })
 });
 
-describe("Restaurant Cards", () => {
+/*describe("Restaurant Cards", () => {
     it("renders correctly", () => {
         const tree = renderer.create(<RestaurantCard />).toJSON();
         expect(tree).toMatchSnapshot();
     })
 });
-
+*/
 describe("Update Profile Page", () => {
     it("renders correctly", () => {
         const tree = renderer.create(<UpdateProfile />).toJSON();

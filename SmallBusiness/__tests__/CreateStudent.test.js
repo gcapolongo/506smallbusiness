@@ -3,11 +3,18 @@ import React from 'react';
 import CreateStudent from '../student_views/CreateStudent';
 import renderer from 'react-test-renderer';
 //for firebase database testing
-import firebaseAdmin from './firebase';
+//import firebaseAdmin from './firebase';
 import { database } from '../Fire';
-const CreateStudent = require("./student_views/CreateStudent");
+//const CreateStudent = require("./student_views/CreateStudent");
 
-const testStudent = CreateStudent( 
+
+describe("Student create", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<CreateStudent />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+})
+/*const testStudent = CreateStudent( 
     'studentemail@wisc.edu',
     'student address',
     'testStudent',
@@ -119,4 +126,4 @@ describe('Create Student', () => {
         expect(currUserRole).toBe("Student")
     })
  })
-})
+})*/

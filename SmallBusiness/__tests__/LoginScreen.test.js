@@ -21,6 +21,31 @@ describe("Router Component", () => {
     })
 });
 
+describe("Router Component", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<Router />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+});
+
+describe("Router Component", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<Router />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+});
+describe("Router Component", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<Router />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+});
+describe("Router Component", () => {
+    it("renders correctly", () => {
+        const tree = renderer.create(<Router />).toJSON();
+        expect(tree).toMatchSnapshot();
+    })
+});
 
 /*
 test('Should successfully return Student Role',() =>{
