@@ -11,6 +11,7 @@ import {
 
 import RestaurantCard from './RestaurantCard'
 import business from './smallBusinesses.json'
+import CustomerUser from '../restaurant_views/CustomerUser';
 
 import { auth } from "../Fire.js";
 import { database } from "../Fire";
@@ -23,18 +24,52 @@ export default class HomeScreen extends React.Component {
         super(props);
         // let data = JSON.parse(JSON.stringify(business));
         this.state = {
-            businesses: []
+            businesses: [],
+            pressed: false,
+            selected:"",
+            chosenBusiness:[],
+            favorites:[]
         };
 
         this.getRestaurantData = this.getRestaurantData.bind(this)
+        this.displayHelp = this.displayHelp.bind(this)
+        this.findBusiness = this.findBusiness.bind(this)
     }
 
     componentDidMount() {
         this.getRestaurantData()
     }
 
-    async getRestaurantData() {
+    async getUserFavorites() {
+        // console.log("HERE IN CARD")
+        let user = auth.currentUser
+        // console.log("CUREENT USERR")
+        // console.log(user)
+        let restaurants = []
+        let value;
+        await database
+            .ref("Users")
+            .child("Customers")
+            .child(user.uid)
+            .child("Favorites")
+            .get()
+            .then(function (snapshot) {
+                snapshot.forEach((childSnapshot) => {
+                if (childSnapshot.exists()) {
+                    value = childSnapshot.val()
+                }
+            }
+            )
+        }
+            )
+            .catch(error => { console.log(error) })
+            .finally(ret => {
+                console.log("Favorites" + value.Favorites)
+                this.setState({ favorites: value.Favorites })
+            })
+    }
 
+    async getRestaurantData() {
         let restaurants = []
         let userValues;
         await database
@@ -45,8 +80,8 @@ export default class HomeScreen extends React.Component {
                 if (snapshot.exists()) {
                     const value = snapshot.val()
                     userValues = Object.values(value)
-                    console.log("VALUE HOMESCREEN")
-                    console.log(value)
+                    // console.log("VALUE HOMESCREEN")
+                    // console.log(value)
                 }
             }
             )
@@ -56,18 +91,57 @@ export default class HomeScreen extends React.Component {
                     restaurants.push(item)
                 ))
 
-                console.log("RESTAURANTS ARRAY")
-                console.log(restaurants)
+                // console.log("RESTAURANTS ARRAY")
+                // console.log(restaurants)
 
                 this.setState({ businesses: restaurants })
 
             })
-
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
+    getStatus(val){
+        this.setState({pressed: val})
+    }
+
+    getChosen(chosen){
+        this.setState({selected: chosen})
+    }
+
+    findBusiness(){
+        console.log("Finding business")
+        console.log("Status is " + this.state.pressed)
+
+        console.log("Selected is " + this.state.selected)
+        let holder = []
+        
+        this.state.businesses.map((item) => {
+            if (item.Name == this.state.pressed){
+                holder.push(item)
+            }
+        })
+
+        return (    
+            <ScrollView>
+            {holder.map((item, index) => (
+                // console.log("IN THE MAP FUNC")
+                <CustomerUser
+                    key={index}
+                    name={item.Name}
+                    address={item.Address} 
+                    image={item.Photo}
+                    hours = {item.Hours}
+                    nav={this.props.nav}
+                    user={this.props.user}
+                />
+        ))}
+            </ScrollView>
+        )
+    }
+
+    displayHelp() {
+        if (!this.state.pressed) {
+            return (
+                <View style={styles.container}>
                 <Text style={styles.title}>
                     Small Business Deals
                 </Text>
@@ -75,24 +149,41 @@ export default class HomeScreen extends React.Component {
                     Restaurants
                 </Text>
                 <ScrollView>
-                    {console.log("STATE ARRAy")}
-                    {console.log(this.state.businesses)}
+                    {/* {console.log("STATE ARRAy")}
+                    {console.log(this.state.businesses)} */}
                     <View style={styles.container}>
-                        {console.log(this.state.businesses)}
+                        {/* {console.log(this.state.businesses)} */}
                         {this.state.businesses.map((item, index) => (
 
                             <RestaurantCard
                                 key={index}
                                 name={item.Name}
                                 address={item.Address}
-                                image={item.photo}
+                                image={item.Photo}
+                                hours = {item.Hours}
                                 nav={this.props.nav}
                                 user={this.props.user}
+                                isPressed = {this.state.pressed}
+                                pressedFunc = {this.getStatus.bind(this)}
+                                chosenFunc = {this.getChosen.bind(this)}
                             />
                         ))}
                     </View>
                 </ScrollView>
-            </View>
+                </View>
+            )
+        }
+        else {
+            // console.log("MET CONDITION FOR CUSTOMER")
+            return ( 
+                this.findBusiness()    
+            )
+        }
+    }
+
+    render() {
+        return (
+            this.displayHelp()
         )
     }
 }

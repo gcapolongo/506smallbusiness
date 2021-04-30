@@ -10,10 +10,11 @@ import {
 } from 'react-native';
 
 import { Card } from 'react-native-elements'
-import business from './smallBusinesses.json'
 import { auth } from "../Fire.js";
 import { database } from "../Fire";
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
+
+import CustomerUser from '../restaurant_views/CustomerUser';
 
 
 export default class RestaurantCard extends React.Component {
@@ -22,66 +23,121 @@ export default class RestaurantCard extends React.Component {
         super(props);
         this.state = {
             Favorites: [],
-            favLabel: "Favorite"
+            favLabel: "Favorite",
+            pressed: false
+
         }
 
         this.registerRestaurant = this.registerRestaurant.bind(this);
         this.getUserFavorties = this.getUserFavorites.bind(this)
         this.addFavorite = this.addFavorite.bind(this)
         this.updateLabel = this.updateLabel.bind(this)
+        this.displayHelp = this.displayHelp.bind(this)
+        this.updatePressed = this.updatePressed.bind(this)
+        this.updateChosen = this.updateChosen.bind(this)
 
     }
 
     componentDidMount() {
-        this.updateLabel()
+        this._navListener = this.props.nav.addListener('focus', () => {
+            this.updateLabel()
+        })
         // console.log("IN MOUNTING")
         // console.log(this.state.Favorites)
         // console.log(this.props.name)
     }
 
     async updateLabel() {
+        console.log("Label")
         await this.getUserFavorites()
-        if (this.state.Favorites.includes(this.props.name)) {
+        // console.log("WHat are favorites")
+        // console.log(this.state.Favorites)
+        if (this.state.Favorites.length > 0 && this.state.Favorites.includes(this.props.name)) {
             this.setState({ favLabel: "In favorites" })
         }
     }
-  
+
     async getUserFavorites() {
-
-        // console.log("HERE IN CARD")
-
         let user = auth.currentUser
         // console.log("CUREENT USERR")
-        // console.log(user)
-        let restaurants = []
+        console.log(user)
+        let favs = []
+        let holder = []
         let value;
         await database
             .ref("Users")
             .child("Customers")
             .child(user.uid)
+            .child("Favorites")
             .get()
             .then(function (snapshot) {
-                if (snapshot.exists()) {
-                    value = snapshot.val()
+                console.log("SNAPSHOT " + snapshot )
+                snapshot.forEach((childSnapshot) => {
+                if (childSnapshot.exists()) {
+                    value = childSnapshot.val()
+                    console.log("CHILDSNAPSHOT " + value)
+                    holder.push(value)
                 }
             }
             )
+        }
+            )
             .catch(error => { console.log(error) })
             .finally(ret => {
-                this.setState({ Favorites: value.Favorites })
+                holder.map((item) => (
+                    favs.push(item.Name)
+                ))
+                // console.log("Favorites" + value.Favorites)
+                this.setState({ Favorites: favs })
             })
     }
 
     registerRestaurant() {
-        this.props.nav.navigate("Customer User");
+
+        this.updatePressed()
+        this.updateChosen()
+        // console.log("HERE")
+
     }
+
+    updatePressed() {
+        if(this.props.isPressed == true){
+            this.props.pressedFunc(false)
+        }
+        else{
+            this.props.pressedFunc(true)
+        }
+    }
+
+    updateChosen(){
+        this.props.pressedFunc(this.props.name)
+
+    }
+    // this.props.nav.navigate("Customer User");
+    // return (
+    //     <CustomerUser
+    //     name={this.props.name}
+    //     address={this.props.address}
+    //     image={this.props.image}
+    //     nav={this.props.nav}
+    //     />
+    // )
+
 
     async addFavorite() {
         let user = auth.currentUser
         this.updateLabel()
         let favList = this.state.Favorites
-        if (favList.includes(this.props.name) == false) {
+        console.log("Before " + favList)
+        if (favList.length == 0) {
+            var favRef = database.ref("Users/Customers/" + user.uid).ref.child("Favorites");
+            favRef.push().set({
+                Name: this.props.name
+            });
+        }
+        else if (favList.length > 0 && favList.includes(this.props.name) == false) {
             favList.push(this.props.name)
+            console.log("After " + favList)
             await database.ref("Users")
                 .child("Customers")
                 .child(user.uid).update({ Favorites: favList })
@@ -90,9 +146,9 @@ export default class RestaurantCard extends React.Component {
         }
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
+    displayHelp() {
+        if (!this.state.pressed) {
+            return (
                 <Card>
                     <Card.Title style={styles.cardTitle}>{this.props.name}</Card.Title>
                     <Card.Divider />
@@ -101,7 +157,43 @@ export default class RestaurantCard extends React.Component {
                         source={{ uri: this.props.image }}
                     />
                     <Text style={styles.cardText}>Address: {this.props.address}</Text>
-                    <Text style={styles.cardText}>Rating: </Text>
+                    <Text style={styles.cardText}>Business Hours: {this.props.hours} </Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity style={styles.btnStyle} onPress={() => this.registerRestaurant()}>
+                            <Text style={styles.btnText}>View Deals</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.btnStyle, { marginLeft: 20 }]} onPress={this.addFavorite}>
+                            <Text style={styles.btnText}>{this.state.favLabel}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Card>
+            )
+        }
+        else {
+            return (
+                <CustomerUser
+                    name={this.props.name}
+                    address={this.props.address}
+                    image={this.props.image}
+                    nav={this.props.nav}
+                />
+            )
+        }
+    }
+
+    render() {
+        return (
+            <View style={styles.container} >
+                <Card>
+                    {console.log("IN THE IF STATEMENT")}
+                    <Card.Title style={styles.cardTitle}>{this.props.name}</Card.Title>
+                    <Card.Divider />
+                    <Image
+                        resizeMode="cover"
+                        source={{ uri: this.props.image }}
+                    />
+                    <Text style={styles.cardText}>Address: {this.props.address}</Text>
+                    <Text style={styles.cardText}>Business Hours: {this.props.hours} </Text>
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity style={styles.btnStyle} onPress={this.registerRestaurant}>
                             <Text style={styles.btnText}>View Deals</Text>

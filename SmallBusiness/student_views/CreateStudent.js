@@ -77,13 +77,13 @@ export default class CreateStudent extends React.Component {
    */
   writeUserData(uid) {
     var myRef = database.ref("Users/Customers").child(uid);
+    var favRef = database.ref("Users/Customers").child(uid);
 
     //This is how the data will be stored in the database
     var newData = {
       Address: this.state.address,
       Contact: this.state.number,
       Email: this.state.email,
-      Favorites: [{}],
       Username: this.state.username,
       Password: this.state.password,
       Role: "Student",

@@ -39,9 +39,18 @@ export default class ProfileView extends React.Component {
         this.getRestaurants = this.getRestaurants.bind(this)
         this.filterFavorites = this.filterFavorites.bind(this)
         this.getUserData = this.getUserData.bind(this)
+        this.getAllData = this.getAllData.bind(this)
     }
 
     componentDidMount() {
+        // this.filterFavorites()
+        // this.getUserData()
+        this._navListener = this.props.navigation.addListener('focus', () => {
+            this.getAllData()
+        })
+    }
+
+    getAllData() {
         this.filterFavorites()
         this.getUserData()
     }
@@ -62,41 +71,80 @@ export default class ProfileView extends React.Component {
             )
             .catch(error => { console.log(error) })
             .finally(ret => {
-                console.log(value.Favorites)
+                // console.log(value.Favorites)
                 this.setState({ username: value.Username })
                 this.setState({ userAddress: value.Address })
 
             })
     }
 
-    async getFavorites() {
+    // async getFavorites() {
 
-        console.log("GETTING FAVS")
+    //     // console.log("GETTING FAVS")
+    //     let user = auth.currentUser
+
+    //     let value;
+    //     await database
+    //         .ref("Users")
+    //         .child("Customers")
+    //         .child(user.uid)
+    //         .get()
+    //         .then(function (snapshot) {
+    //             if (snapshot.exists()) {
+    //                 value = snapshot.val()
+    //             }
+    //         }
+    //         )
+    //         .catch(error => { console.log(error) })
+    //         .finally(ret => {
+    //             // console.log("All favorites in profile")
+    //             // console.log(value.Favorites)
+    //             if(value.Favorites){
+    //                 this.setState({ userFavorites: value.Favorites })
+    //             }
+
+    //         })
+    // }
+
+    async getFavorites(){
+        // console.log("HERE GETTING FAVORITES IN PROFILE")
         let user = auth.currentUser
-
+        // console.log("CUREENT USERR")
+        console.log(user)
+        let favs = []
+        let holder = []
         let value;
         await database
             .ref("Users")
             .child("Customers")
             .child(user.uid)
+            .child("Favorites")
             .get()
             .then(function (snapshot) {
-                if (snapshot.exists()) {
-                    value = snapshot.val()
+                console.log("SNAPSHOT " + snapshot )
+                snapshot.forEach((childSnapshot) => {
+                if (childSnapshot.exists()) {
+                    value = childSnapshot.val()
+                    console.log("CHILDSNAPSHOT " + value)
+                    holder.push(value)
                 }
             }
             )
+        }
+            )
             .catch(error => { console.log(error) })
             .finally(ret => {
-                console.log(value.Favorites)
-                this.setState({ userFavorites: value.Favorites })
-
+                holder.map((item) => (
+                    favs.push(item.Name)
+                ))
+                // console.log("Favorites" + value.Favorites)
+                this.setState({ userFavorites: favs })
             })
     }
 
     async getRestaurants() {
 
-        console.log("GETTING RESTAU")
+        // console.log("GETTING RESTAU")
 
         let restaurants = []
         let userValues;
@@ -135,14 +183,17 @@ export default class ProfileView extends React.Component {
         await this.getFavorites()
         let favorites = []
 
-        this.state.businesses.map((item) => {
-            // console.log("ITEEM in profile")
-            // console.log(item)
-            if (this.state.userFavorites.includes(item.Name)) {
-                favorites.push(item)
+        if (this.state.userFavorites.length > 0) {
+
+            this.state.businesses.map((item) => {
+                // console.log("ITEEM in profile")
+                // console.log(item)
+                if (this.state.userFavorites.includes(item.Name)) {
+                    favorites.push(item)
+                }
             }
+            )
         }
-        )
 
 
         this.setState({ filteredFavorites: favorites })
