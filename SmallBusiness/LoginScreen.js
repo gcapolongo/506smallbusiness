@@ -52,7 +52,6 @@ export default class LoginScreen extends React.Component {
         if (this.state.role === "Student") {
           //if role is user go to homescreen
           this.props.nav.navigate("HomeScreen");
-          alert("Logged in as a student");
         } else {
           //if user is a restaurant owner go to restaurant screen
           this.props.nav.navigate("Restaurant User");
@@ -87,16 +86,11 @@ export default class LoginScreen extends React.Component {
 
             userValues = Object.values(data);
 
-            //prints an array of the customer's info
-            // console.log(userValues)
-
             for (let i = 0; i < userValues.length; i++) {
               if ((userValues[i] = "Student")) {
                 role = userValues[i];
               }
             }
-            //role = userValues[3];
-            // console.log("Role of the current user logging in: " + role);
           }
         })
         .catch(function (error) {
@@ -119,8 +113,6 @@ export default class LoginScreen extends React.Component {
                 role = userValues[i];
               }
             }
-            //role = userValues[4];
-            // console.log("Role of the current user logging in: " + role);
           }
         })
         .catch(function (error) {
