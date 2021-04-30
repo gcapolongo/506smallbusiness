@@ -19,19 +19,22 @@ export default class CustomerUser extends React.Component {
       rating: "-",
       businesshours: "-",
       dealArray: [],
+      selected: ["Hi"]
     };
 
     this.handleEdit = this.handleEdit.bind(this);
     this.getDealData = this.getDealData.bind(this);
+    this.getRestaurant = this.getRestaurant.bind(this)
   }
 
   //Fetching data from firebase via getDealData
-  async componentDidMount() {
+  componentDidMount() {
+    this.getRestaurant()
     this.getInfo();
 
     //returns an array of deal objects
     this.getDealData();
-  
+
   }
 
   // event handler for add deal button
@@ -90,28 +93,53 @@ export default class CustomerUser extends React.Component {
     }
   };
 
-  /**
-   * 
-   */
-  /* getDealDataa = async () => {
-    var user = auth.currentUser;
-    let data = "";
-    let dealArray = [];
+
+  getRestaurant = async () => {
+    let selectedRestaurant = []
+    let final = []
+    let userValues;
     await database
       .ref("Users")
       .child("Restaurants")
-      .child(user.uid)
-      .child("Deals")
-      .once("value", function (snapshot) {
+      .get()
+      .then(function (snapshot) {
         if (snapshot.exists()) {
-          data = snapshot.val();
-          console.log(data);
+          const value = snapshot.val()
+          userValues = Object.values(value)
+          // console.log("CUSTOMER USER")
+          // console.log(item.getUid())
+
         }
+      }
+      )
+      .catch(error => { console.log(error) })
+      .finally(ret => {
+        userValues.map((item) => {
+          if (item.Name == this.props.name) {
+            selectedRestaurant.push(item)
+          }
+        })
+
+        console.log("RESTAURANTS ARRAY HERE IN METHOD")
+        console.log(selectedRestaurant)
+
+        this.setState({ selected: selectedRestaurant })
+
+        console.log("RESTAURANTS IN STATE ARRAY")
+        console.log(this.state.selected)
+        selectedRestaurant.map(value => {
+          console.log("MAPPING INITIAL STATE")
+          console.log(value.Deals)
+          if (value.Deals) {
+            Object.keys(value.Deals).map(dval => final.push(value.Deals[dval]))
+          }
+          console.log("MAPPING THE STATE")
+          console.log(final)
+          this.setState({ selected: final })
+        })
+
       })
-      .catch(function (error) {
-        // console.error(error);
-      });
-  }; */
+  };
 
   /**
    * Grabs deal information from database (Title, Description)
@@ -137,7 +165,8 @@ export default class CustomerUser extends React.Component {
       });
 
     this.setState({ dealArray: returnArr });
-    
+
+
   };
 
   render() {
@@ -147,18 +176,17 @@ export default class CustomerUser extends React.Component {
           <Text style={[styles.title, { fontSize: 32, marginLeft: 0 }]}>
             Small Business Deals
           </Text>
-          <Text style={styles.title}>{this.state.name}</Text>
+          <Text style={styles.title}>{this.props.name}</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.inputHeaders}>
-              Address: {this.state.location}
+              Address: {this.props.address}
             </Text>
             <Text style={styles.inputHeaders}>
-              Business Hours: {this.state.businesshours}
+              Business Hours: {this.props.hours}
             </Text>
-            <Text style={styles.inputHeaders}>Rating: 3.5</Text>
-
-            <Text style={styles.title}>Deals </Text>
-            {this.state.dealArray.map((deal, index) => (
+            <Text style={styles.title}>Deals</Text>
+            {console.log("SELECTED IN CUSTOMERUSER " + this.state.selected)}
+            {this.state.selected.map((deal, index) => (
               <Card key={index}>
                 <Card.Title
                   style={[styles.cardTitle, { flexDirection: "row" }]}
