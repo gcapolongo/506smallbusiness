@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 10,
         marginTop: 10,
-        marginLeft: 700,
+        marginLeft: 60,
         fontSize: 18
     },
     inputContainer: {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         width: 250,
         borderRadius: 5,
         marginTop: 20,
-        marginLeft: 675,
+        marginLeft: 65,
         height: 70,
         alignItems: "center",
         justifyContent: "center",
